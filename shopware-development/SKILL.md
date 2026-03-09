@@ -54,7 +54,7 @@ Read only the files needed for the current task:
 - `references/02-version-targeting.md`
   Use first when the target version is unclear or the task may differ between 6.7 and 6.6.
 - `references/03-implementation-workflow.md`
-  Use for step-by-step delivery, chunking, validation, and regression control.
+  Use for step-by-step delivery, chunking, validation, regression control, and default PR description structure.
 - `references/04-plugin-backend.md`
   Use for plugin architecture, DI, DAL, Store API/Admin API, caching, migrations, queues, and project-level backend work.
 - `references/05-storefront-and-themes.md`
@@ -83,4 +83,5 @@ Read only the files needed for the current task:
 - State the target Shopware version explicitly when it affects the answer.
 - For implementation work, explain the next smallest safe step rather than proposing a broad rewrite.
 - For review work, present findings first, ordered by severity and blast radius.
+- When the user asks for a PR description, merge request description, or release-ready implementation summary, default to the detailed structure from `references/03-implementation-workflow.md` unless the user requested another format.
 - For uncertain versioned behavior, say that verification against the exact docs/core tag is required.

@@ -517,6 +517,21 @@ $shopware-development analyze and fix this plugin. Keep the Shopware guardrails 
 
 This last pattern is the default recommendation for most real work.
 
+### PR description default
+
+If you ask for a PR or merge-request description and do not specify another format, the skill should default to a detailed structure with:
+
+- `Description`
+- `Problem`
+- `Why this is critical` or `Why this matters`
+- `Implementation`
+- `Affected plugin areas`
+- `Risk and regression assessment`
+- `Validation performed`
+- `QA notes`
+
+`QA notes` should read like a compact test guide, not a vague reminder.
+
 ## Versioning And Release
 
 This repo is intended to start at:
