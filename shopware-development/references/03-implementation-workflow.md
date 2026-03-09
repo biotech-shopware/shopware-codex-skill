@@ -94,3 +94,53 @@ Always capture:
 - remaining risk or follow-up chunk
 
 For review work, use `08-analysis-and-reviews.md` instead of this file's delivery format.
+
+## Step 9: Write PR Descriptions By Default
+
+If the user asks for a PR description, merge request description, implementation summary for a PR, or does not specify another release-note format, use a detailed structure by default.
+
+Expected sections:
+
+1. `Description`
+2. `Problem`
+3. `Why this is critical` or `Why this matters`
+4. `Implementation`
+5. `Affected plugin areas`
+6. `Risk and regression assessment`
+7. `Validation performed`
+8. `QA notes`
+
+Guidance for each section:
+
+- `Problem`
+  Explain the concrete failure or deficiency in plain language. State the real trust boundary, broken flow, scale issue, or business impact.
+- `Why this is critical` or `Why this matters`
+  Explain the risk, exploitability, regression surface, or operational impact. This should justify priority, not repeat the problem statement.
+- `Implementation`
+  Describe what changed in enough detail that a reviewer can understand the fix path without reopening every file immediately.
+- `Affected plugin areas`
+  Use a flat bullet list of the touched subsystems, flows, or boundaries, not a raw file dump.
+- `Risk and regression assessment`
+  State the realistic regression level and the main condition that could still fail after rollout.
+- `Validation performed`
+  List the exact checks, commands, or manual validations actually run. Do not imply coverage that was not executed.
+- `QA notes`
+  Write this as a mini test guide. Call out environment-specific setup, happy path, failure path, and the main regression checks QA must perform.
+
+Style expectations:
+
+- Be more detailed than the default final answer.
+- Write in complete sentences, not terse changelog fragments.
+- Focus on behavior, risk, and validation, not just edited files.
+- Keep the narrative readable by engineering, product, and QA.
+- If the change is security-sensitive or payment-sensitive, make the trust boundary and negative-path testing explicit.
+
+Default QA coverage should include:
+
+- required configuration or environment notes
+- primary success path
+- primary failure or rejection path
+- regression checks for adjacent flows
+- any production vs sandbox differences
+
+If a section is truly not applicable, say so briefly rather than deleting the section. The default is completeness.
