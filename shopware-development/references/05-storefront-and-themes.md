@@ -81,4 +81,5 @@ Official docs:
 
 - For cart or checkout behavior, also load `04-plugin-backend.md`.
 - For payment UI, tokenization, or redirect/finalize flows, also load `07-payments.md`.
+- For headless or composable frontend packages, also load `16-headless-and-composable-frontends.md`.
 - For cookie consent, store readiness, or release quality checks, also load `11-quality-and-operations.md`.

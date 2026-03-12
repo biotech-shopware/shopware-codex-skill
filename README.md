@@ -1,6 +1,6 @@
 # Shopware Codex Skill
 
-Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, payment integrations, subscriptions and recurring-commerce flows, storefront work, administration work, and architecture analysis.
+Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, payment integrations, subscriptions and recurring-commerce flows, storefront work, headless or composable frontend integrations, administration work, and architecture analysis.
 
 The repository is intentionally small:
 
@@ -67,7 +67,8 @@ shopware-skills/
         ├── 12-extension-patterns.md
         ├── 13-context-and-commerce.md
         ├── 14-cli-and-dev-tooling.md
-        └── 15-subscriptions-and-recurring-payments.md
+        ├── 15-subscriptions-and-recurring-payments.md
+        └── 16-headless-and-composable-frontends.md
 ```
 
 ### Root files
@@ -96,6 +97,7 @@ shopware-skills/
 - administration modules and app extensions
 - payment handlers, redirects, webhooks, vaulting, refunds, and payment reviews
 - subscriptions, renewals, saved-payment-method ownership, and recurring-commerce flows
+- headless or composable frontend payment integrations and browser/backend contract reviews
 - Store API and Admin API extension work
 - DAL design, migrations, service architecture, and queue patterns
 - project-level Shopware implementation planning
@@ -112,6 +114,7 @@ The skill encodes repeatable Shopware-specific constraints that generic coding g
 - admin ACL and permissions discipline
 - storefront performance traps
 - recurring P0/P1 failure modes from real plugin reviews
+- browser trust-boundary failures in separate frontend payment packages
 
 ## Skill Architecture
 
@@ -344,6 +347,19 @@ Owns recurring and subscription-specific rules:
 
 Use this when renewals, subscriptions, saved methods, or multi-plugin recurring reviews are in scope.
 
+### [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md)
+
+Owns headless or composable frontend payment contract rules:
+
+- browser-authored versus server-authoritative values
+- browser storage trust boundaries for saved methods and vault identities
+- browser logging restrictions for tokens, context, and payment payloads
+- composable checkout data-flow duplication and SDK-loading discipline
+- headless payment-link and hosted-checkout callback-target hardening
+- paired backend plus frontend review prompts for one payment journey
+
+Use this when a Shopware backend plugin shares one checkout or payment flow with a separate frontend package, composable layer, or browser-heavy payment SDK integration.
+
 ## How The Skill Works With The Current Model
 
 This skill is meant to improve the model, not narrow it.
@@ -356,6 +372,7 @@ It adds Shopware-specific guardrails:
 - which version assumptions are dangerous
 - which Shopware patterns are safe
 - which recurring bugs and security issues to look for
+- which frontend payment flows leak trust into the browser
 
 ### What the skill does not change
 
@@ -406,6 +423,7 @@ Use `shopware-development` by default for:
 - payment integration work
 - subscription lifecycle and renewal work
 - saved-payment-method or recurring-payment ownership reviews
+- headless or composable frontend payment work
 - storefront Twig/JS/SCSS changes
 - admin module work
 - Store API/Admin API extensions
@@ -492,6 +510,7 @@ Good project prompt ingredients:
 - whether backward compatibility matters
 - whether the task is a fix, review, or feature
 - whether one plugin or multiple repos/plugins are part of the flow
+- whether a separate frontend package or composable checkout participates in the flow
 - whether you want the safest path or broader alternatives first
 
 ## Prompt Patterns
@@ -524,6 +543,12 @@ $shopware-development review and fix this payment integration with focus on vali
 
 ```text
 $shopware-development review these subscription and PSP plugins together with focus on ownership, recurring references, renewal authority, saved methods, and cross-plugin contract drift.
+```
+
+### Headless and composable frontend payment work
+
+```text
+$shopware-development review this backend plugin and frontend checkout package together with focus on browser-authored payment data, callback authority, token exposure, storage trust, and server-side payment truth.
 ```
 
 ### Storefront work
@@ -564,6 +589,21 @@ If you ask for a PR or merge-request description and do not specify another form
 ## Versioning And Release
 
 This repository keeps release history in the README and in annotated git tags.
+
+### `v0.2.0`
+
+Headless and composable frontend payment coverage release.
+
+Detailed changelog:
+
+- Added [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md) as the primary owner for browser trust boundaries, frontend/backend payment contracts, composable checkout flow review, callback-target hardening, and browser-side payment anti-patterns.
+- Expanded [SKILL.md](shopware-development/SKILL.md) so the skill routes headless frontend integrations, browser-storage trust boundaries, and backend plus frontend payment audits explicitly while staying lean.
+- Strengthened [04-plugin-backend.md](shopware-development/references/04-plugin-backend.md) with server-authoritative headless payment rules, including cart or order recalculation before payment-state writes and backend ownership resolution for saved-method references.
+- Strengthened [07-payments.md](shopware-development/references/07-payments.md) with hosted-checkout callback-target hardening, explicit authority boundaries for browser-authored payment identifiers, and timeout-bound provider verification helpers.
+- Strengthened [08-analysis-and-reviews.md](shopware-development/references/08-analysis-and-reviews.md) with separate frontend repo scope coverage, backend plus frontend payment triangulation, and browser-authored versus server-resolved authority mapping.
+- Strengthened [11-quality-and-operations.md](shopware-development/references/11-quality-and-operations.md) with bans on browser-console logging of tokens or payment payloads and on treating browser storage as authoritative payment or vault state.
+- Added a dedicated prompt pattern for paired backend and frontend payment reviews so headless checkout audits are triggered intentionally instead of being treated as generic storefront work.
+- Preserved the existing findings-first review posture, recurring-payment structure, and detailed PR-description default; the new release extends coverage without weakening version-targeting, payment, review, or security rules already in the skill.
 
 ### `v0.1.0`
 
@@ -624,5 +664,7 @@ If a new rule is discovered from real plugin reviews:
 4. only update [SKILL.md](shopware-development/SKILL.md) if the top-level routing or trigger behavior needs to change
 
 If the learning belongs primarily to renewals, subscriptions, saved methods, or recurring multi-plugin flows, prefer [15-subscriptions-and-recurring-payments.md](shopware-development/references/15-subscriptions-and-recurring-payments.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
+
+If the learning belongs primarily to a backend plugin plus separate frontend checkout package, browser storage trust boundary, hosted-checkout callback contract, or headless payment review, prefer [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
 
 This keeps the skill open-ended, specific, and maintainable.

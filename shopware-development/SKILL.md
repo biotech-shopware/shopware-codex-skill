@@ -1,13 +1,13 @@
 ---
 name: shopware-development
-description: Plan, implement, refactor, or review Shopware 6 changes with Shopware 6.7 as the default target and explicit Shopware 6.6 compatibility handling. Use for plugin development, theme and template work, storefront Twig/JS/SCSS changes, administration modules, app extensions, payment integrations, subscriptions and recurring-commerce flows, saved-payment-method ownership issues, CMS elements, import/export work, media handling, Rule Builder conditions, CLI and tooling tasks, multichannel context issues, project implementation planning, migrations, performance/security hardening, and Shopware code reviews or multi-plugin architecture analysis.
+description: Plan, implement, refactor, or review Shopware 6 changes with Shopware 6.7 as the default target and explicit Shopware 6.6 compatibility handling. Use for plugin development, theme and template work, storefront Twig/JS/SCSS changes, headless or composable frontend integrations, administration modules, app extensions, payment integrations, subscriptions and recurring-commerce flows, saved-payment-method ownership issues, CMS elements, import/export work, media handling, Rule Builder conditions, CLI and tooling tasks, multichannel context issues, project implementation planning, migrations, performance/security hardening, and Shopware code reviews or multi-plugin architecture analysis.
 ---
 
 # Shopware Development
 
 ## Overview
 
-Use this skill to keep Shopware work version-aware, upgrade-safe, and incremental. It distills the attached Shopware guides and agent pack into a small workflow layer plus clustered references, with official Shopware docs as the authority when guidance conflicts. Use it for recurring commerce, saved-payment-method flows, and multi-plugin audits where subscription and PSP plugins share one customer journey.
+Use this skill to keep Shopware work version-aware, upgrade-safe, and incremental. It distills the attached Shopware guides and agent pack into a small workflow layer plus clustered references, with official Shopware docs as the authority when guidance conflicts. Use it for recurring commerce, saved-payment-method flows, headless payment frontends, and multi-plugin audits where backend plugins and separate frontend packages share one customer journey.
 
 ## Source Discipline
 
@@ -25,16 +25,17 @@ Treat attached source material, ADRs, issues, forums, and blog posts as context 
 2. Classify the task before reading references:
    - implementation or refactor
    - storefront or theme work
+   - headless or composable frontend work
    - administration or app extension work
    - payment work
    - subscription or recurring-commerce flow
    - integration or multi-repo review
    - review or architecture analysis
 3. Load only the relevant reference files for that task. Do not bulk-load the whole `references/` directory.
-4. Inventory mutation surfaces, trust boundaries, ownership boundaries, and cross-plugin contracts before proposing fixes.
+4. Inventory mutation surfaces, trust boundaries, ownership boundaries, browser-authored data, and cross-plugin contracts before proposing fixes.
 5. Plan the smallest safe change set. One concern per chunk: versioning, data model, API, UI, payment flow, recurring flow, or review findings.
 6. Preserve extension points and existing project patterns unless the task explicitly includes a migration.
-7. For multi-repo reviews, do not finalize findings until a triangulation pass checks how identifiers, saved methods, custom fields, webhook state, and recurring references move across repos.
+7. For multi-repo reviews, do not finalize findings until a triangulation pass checks how identifiers, saved methods, browser-stored values, custom fields, webhook state, and recurring references move across repos.
 8. Validate after each chunk with the narrowest useful checks.
 9. Report version assumptions, what changed, what was verified, and any remaining regression risk.
 
@@ -70,6 +71,8 @@ Read only the files needed for the current task:
   Use for plugin architecture, DI, DAL, Store API/Admin API, caching, migrations, queues, and project-level backend work.
 - `references/05-storefront-and-themes.md`
   Use for Twig, storefront JS, SCSS, themes, page loaders, SEO, accessibility, and performance-sensitive template work.
+- `references/16-headless-and-composable-frontends.md`
+  Use for headless or composable frontend packages, browser-storage trust boundaries, frontend/backend payment contracts, and cross-repo payment UX audits.
 - `references/06-administration-and-apps.md`
   Use for admin modules, services, permissions, apps, Vue 3 migration, and 6.7 Pinia/Vite migration work.
 - `references/07-payments.md`
@@ -98,5 +101,6 @@ Read only the files needed for the current task:
 - For review work, present findings first, ordered by severity and blast radius.
 - Every material finding should include the failure mode, blast radius, smallest safe fix, regression note, and validation note.
 - When the flow spans multiple plugins or repos, add a separate cross-flow section for contract drift instead of hiding it inside one plugin review.
+- When backend and frontend repos share one payment flow, make it explicit which values are browser-authored hints and where server authority is re-established.
 - When the user asks for a PR description, merge request description, or release-ready implementation summary, default to the detailed structure from `references/03-implementation-workflow.md` unless the user requested another format.
 - For uncertain versioned behavior, say that verification against the exact docs/core tag is required.

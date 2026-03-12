@@ -11,6 +11,8 @@
 - Never set `verify => false` or equivalent TLS-disable flags in production HTTP clients.
 - Distinguish browser-write routes from server-to-server endpoints. Browser-initiated POSTs need CSRF or equivalent request protection; webhooks and signed callbacks usually disable CSRF and replace it with sender authentication.
 - State-changing customer-facing endpoints should be POST-only and protected against IDOR or ownership bypass. Do not expose mutations over GET.
+- Do not log tokens, context tokens, provider responses, or payment payloads to the browser console or client-side telemetry by default.
+- Do not treat `localStorage`, `sessionStorage`, or other browser-persisted values as authoritative payment, vault, or ownership state.
 
 Official docs:
 
@@ -84,7 +86,9 @@ Treat these as explicit regression checks:
 - broad cache invalidations on high-frequency events
 - missing ACL or ownership checks
 - logging secrets, tokens, or raw payloads
+- browser console or client telemetry logging of tokens, context tokens, or payment payloads
 - exposing Admin API credentials or private third-party keys to the storefront
+- browser storage used as an authoritative source for saved-method, vault, or payment identity
 - browser routes that disable CSRF without replacing it with the right security model
 - GET endpoints that mutate customer data or order state
 - internal plugins calling the shop's own HTTP API instead of shared services
