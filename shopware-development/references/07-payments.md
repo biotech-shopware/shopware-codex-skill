@@ -105,6 +105,17 @@ Example:
 - Trigger refunds from admin or automation flows, not storefront endpoints.
 - Support partial refunds only with explicit idempotency and reconciliation rules.
 
+## Recurring PSP Boundaries
+
+- Load `15-subscriptions-and-recurring-payments.md` when subscription lifecycle, renewal scheduling, or multi-plugin recurring flow is in scope.
+- Treat saved-card settings routes, recurring-preference AJAX routes, and subscription payment-method change routes as part of the payment trust boundary.
+- Enforce ownership on saved cards, provider-choice records, and subscription-linked payment-method mappings by customer and sales-channel context.
+- Keep provider recurring references scoped to the correct order transaction or local vault record and persist them only when the renewal flow truly needs them.
+- Make finalize, recurring charge, and webhook flows agree on one authority for marking payment success.
+- Keep recurring-operation identifiers idempotent across retries so duplicate task runs or duplicate callbacks cannot create duplicate provider side effects.
+- If a subscription plugin persists a provider-specific choice, require the save step to be atomic with the payment-method change or clearly recoverable after failure.
+- Review subscription-side helper endpoints with the same rigor as payment handlers, because they often decide which saved method will be charged later.
+
 ## Performance and Observability
 
 - Do not block checkout on slow provider calls that can be verified later.
@@ -112,6 +123,7 @@ Example:
 - Reuse shared HTTP clients; do not instantiate clients per request.
 - Add circuit-breaker behavior when provider slowness can exhaust workers or PHP-FPM capacity.
 - Log correlation IDs, order transaction IDs, and provider references, not full payloads.
+- If support needs recurring diagnostics, expose concise internal audit metadata instead of raw webhook bodies or full PSP responses.
 - Store an internal audit trail when the payment domain needs long-lived supportability.
 - If the support workflow needs it, expose a concise admin timeline or order detail panel based on audit data, not raw provider payloads.
 - Track metrics when scale warrants it: invalid signatures, retries, refund failures, timeout rates, and queue backlog.
@@ -125,5 +137,6 @@ Example:
 - duplicate webhook idempotency
 - refund/capture retry safety
 - saved-method ownership enforcement
+- recurring charge or subscription payment-method change authority if present
 - concurrency between admin refunds and webhook deliveries
 - degraded-provider load behavior so timeouts and circuit breakers do not starve checkout workers

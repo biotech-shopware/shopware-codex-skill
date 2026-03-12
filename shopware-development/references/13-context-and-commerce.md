@@ -17,6 +17,7 @@ Example:
 
 - Respect `salesChannelId`, language, currency, customer group, and tax state in customer-facing logic.
 - Enforce ownership and channel boundaries server-side for saved customer data, tokens, and account operations.
+- Enforce the same ownership rules for subscriptions, saved payment methods, subscription addresses, line items, and provider-specific card-choice mappings.
 - Do not assume one storefront, one language, or one price context.
 - If shipping methods, catalogs, or prices vary for roles such as sales agents or B2B segments, enforce that in backend resolution and route validation, not only in Twig visibility.
 
@@ -24,6 +25,7 @@ Example:
 
 - Keep pricing logic aware of currency, tax state, rule evaluation, and customer group.
 - Avoid computing or caching prices outside the correct sales-channel scope.
+- Recalculate recurring-order totals, shipping, and payment context from the active or reconstructed sales-channel context instead of reusing stale original transaction assumptions.
 - Treat external tax integrations as hot-path risks and apply the same timeout and fallback rules used elsewhere in checkout.
 
 ## B2B and Organization-Sensitive Logic

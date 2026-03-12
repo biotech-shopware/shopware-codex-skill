@@ -37,6 +37,8 @@ Official docs:
 - Log failures, retries, and state changes without dumping full request or response payloads.
 - Redact tokens, signatures, secrets, and PII by default.
 - Keep a lightweight audit trail for merchant support, but do not turn application tables into an unbounded log sink.
+- If the domain stores order snapshots, cart snapshots, or provider payloads, keep only the minimum fields needed for support and reconciliation.
+- Review recurring-payment and webhook logs specifically for leaked provider tokens, card identifiers, customer identifiers, signatures, and raw payload bodies.
 
 Official docs:
 
@@ -89,9 +91,20 @@ Treat these as explicit regression checks:
 - writes or recalculations triggered from storefront render events or read routes
 - route duplication that drops core ACL or validation
 - scheduled tasks with tiny intervals, unbounded scans, or duplicate handler registration
+- scheduled tasks, reminders, or renewal workers that branch on translated state names instead of technical names
+- invalid DAL association usage such as treating `customFields` like a normal association
+- heavy blob hydration or full snapshot loading on large recurring batches without a clear need
 - cache entries with unbounded growth because keys are serialized payloads and TTL is missing
 - mutable operational flags stored in JSON payloads or custom fields and later queried at scale
 - deep template copying instead of block extension
 - copying core-only metadata into plugin code
 - silent API contract changes without versioning or compatibility planning
 - shipping dev artifacts or duplicated translation files in the plugin package
+
+## Scheduled Tasks and Recurring Batches
+
+- Batch due-item scans explicitly. Do not assume production data sets stay small.
+- Keep loop control safe when external failures or partial processing happen. Do not advance business-critical schedule fields before success is known.
+- Prefer technical names, stable IDs, or persisted state markers over translated labels in task logic.
+- Avoid broad association trees in scheduled-task hydration unless every field is required for the batch decision.
+- If a task stores snapshots or support data, put a bound on retention and growth.
