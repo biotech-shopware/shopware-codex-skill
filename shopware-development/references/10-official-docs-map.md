@@ -37,12 +37,31 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 ## Storefront and Themes
 
 - customize templates: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/customize-templates.html`
+- add custom JavaScript: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-javascript.html`
 - custom styling: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-styling.html`
+- using a modal window: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/using-a-modal-window.html`
+- add cookie to manager: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-cookie-to-manager.html`
+- reacting to cookie consent changes: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/reacting-to-cookie-consent-changes.html`
+- working with media and thumbnails: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/use-media-thumbnails.html`
 - add SCSS variables: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-scss-variables.html`
 - theme inheritance: `https://developer.shopware.com/docs/guides/plugins/themes/add-theme-inheritance.html`
 - SEO guides: `https://developer.shopware.com/docs/guides/plugins/plugins/content/seo/`
 - add custom SEO URL: `https://developer.shopware.com/docs/guides/plugins/plugins/content/seo/add-custom-seo-url.html`
 - custom fields in storefront: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/using-custom-fields-storefront.html`
+
+## Accessibility and U.S. Standards
+
+- ADA web guidance: `https://www.ada.gov/resources/web-guidance/`
+- ADA 2024 web rule: `https://www.ada.gov/resources/2024-03-08-web-rule/`
+- WCAG 2.2: `https://www.w3.org/TR/WCAG22/`
+- WAI-ARIA APG index: `https://www.w3.org/WAI/ARIA/apg/`
+- dialog modal pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/`
+- menu button pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/`
+- tabs pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/tabs/`
+- carousel pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/carousel/`
+- disclosure pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/`
+- combobox pattern: `https://www.w3.org/WAI/ARIA/apg/patterns/combobox/`
+- Section 508 / ICT baseline: `https://www.access-board.gov/ict/`
 
 ## Administration and Apps
 

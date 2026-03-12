@@ -1,4 +1,4 @@
 interface:
   display_name: "Shopware Development"
-  short_description: "Shopware 6.6/6.7 plugin, payment, headless, recurring, and review skill"
-  default_prompt: "Use $shopware-development to plan, implement, harden, or review a Shopware 6 change, including recurring flows, headless payment contracts, and multi-plugin audits."
+  short_description: "Shopware 6.6/6.7 plugin, accessibility, payment, headless, recurring, and review skill"
+  default_prompt: "Use $shopware-development as Shopware guardrails and context, not a cap on investigation depth, to plan, implement, harden, or review a Shopware 6 change, including accessibility, recurring flows, headless payment contracts, and multi-plugin audits."

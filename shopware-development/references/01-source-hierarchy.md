@@ -26,6 +26,14 @@ Use this order whenever guidance differs:
 
 Everything else is context until verified.
 
+For storefront accessibility questions, use this variant:
+
+1. Official Shopware docs for the exact target version.
+2. Stable Shopware core storefront behavior matching the project version.
+3. WCAG 2.2, WAI-ARIA APG, ADA.gov, and U.S. Access Board material when the question is accessibility-specific.
+4. Official Symfony docs when framework behavior matters to the implementation.
+5. This skill's distilled references.
+
 ## Clustering Rules
 
 Keep each concern in one place:
@@ -33,7 +41,8 @@ Keep each concern in one place:
 - Workflow and loading rules belong in `SKILL.md` and `03-implementation-workflow.md`.
 - Version splits belong in `02-version-targeting.md`.
 - General plugin and project backend rules belong in `04-plugin-backend.md`.
-- Storefront, Twig, JS, SCSS, theme, SEO, and accessibility rules belong in `05-storefront-and-themes.md`.
+- Compact storefront, Twig, JS, SCSS, theme, SEO, and implementation-level accessibility rules belong in `05-storefront-and-themes.md`.
+- Deep accessibility standards, WCAG-oriented audit heuristics, and storefront compliance review patterns belong in `17-accessibility-and-template-best-practices.md`.
 - Administration modules, app extensions, and admin migration guidance belong in `06-administration-and-apps.md`.
 - Payment-only rules belong in `07-payments.md`.
 - Review/audit rules belong in `08-analysis-and-reviews.md`.
