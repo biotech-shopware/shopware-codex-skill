@@ -1,11 +1,13 @@
 # Shopware Codex Skill
 
-Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, payment integrations, subscriptions and recurring-commerce flows, storefront work, headless or composable frontend integrations, administration work, and architecture analysis.
+Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, accessibility or storefront compliance reviews, payment integrations, subscriptions and recurring-commerce flows, storefront work, headless or composable frontend integrations, administration work, and architecture analysis.
 
 The repository is intentionally small:
 
 - one installable skill
 - one root README
+- one root changelog
+- one root license
 - one `.gitignore`
 - no extra packaging layer
 
@@ -47,6 +49,8 @@ This repo exists for four reasons:
 ```text
 shopware-skills/
 ├── .gitignore
+├── CHANGELOG.md
+├── LICENSE
 ├── README.md
 └── shopware-development/
     ├── SKILL.md
@@ -68,11 +72,16 @@ shopware-skills/
         ├── 13-context-and-commerce.md
         ├── 14-cli-and-dev-tooling.md
         ├── 15-subscriptions-and-recurring-payments.md
-        └── 16-headless-and-composable-frontends.md
+        ├── 16-headless-and-composable-frontends.md
+        └── 17-accessibility-and-template-best-practices.md
 ```
 
 ### Root files
 
+- [CHANGELOG.md](CHANGELOG.md)
+  Canonical detailed release history for the skill. This should always be updated for skill-affecting changes.
+- [LICENSE](LICENSE)
+  Repository license. The repo ships under MIT.
 - [README.md](README.md)
   Operator guide for installing, using, maintaining, and releasing the skill.
 - [.gitignore](.gitignore)
@@ -94,6 +103,7 @@ shopware-skills/
 - Shopware 6.7-first work with explicit 6.6 compatibility handling
 - plugin implementation and refactoring
 - storefront Twig, JavaScript, and SCSS work
+- accessibility and storefront compliance reviews
 - administration modules and app extensions
 - payment handlers, redirects, webhooks, vaulting, refunds, and payment reviews
 - subscriptions, renewals, saved-payment-method ownership, and recurring-commerce flows
@@ -115,6 +125,7 @@ The skill encodes repeatable Shopware-specific constraints that generic coding g
 - storefront performance traps
 - recurring P0/P1 failure modes from real plugin reviews
 - browser trust-boundary failures in separate frontend payment packages
+- accessibility and template pitfalls seen in real storefront reviews
 
 ## Skill Architecture
 
@@ -202,7 +213,7 @@ Owns storefront and theme rules:
 - JS behavior in the storefront
 - SCSS/theme considerations
 - template performance
-- SEO and accessibility basics
+- SEO and implementation-level accessibility basics
 - XSS sinks, JS-context escaping, and `postMessage` origin validation
 - segmented catalog behavior and cache interaction
 
@@ -244,6 +255,7 @@ Owns review mode:
 - finding-first output
 - severity ordering
 - evidence requirements
+- accessibility-first review ordering when accessibility is the primary scope
 - triangulation review for multi-repo or multi-plugin flows
 - blast-radius thinking
 - large-instance review posture
@@ -269,8 +281,10 @@ Index of official docs used most often by the skill:
 - payment guides
 - Store API route guides
 - template guides
+- storefront JS, media, and consent guides
 - migrations
 - admin migration docs
+- accessibility standards and patterns
 - rate limiter
 - CMS elements
 - Flow Builder triggers
@@ -360,9 +374,25 @@ Owns headless or composable frontend payment contract rules:
 
 Use this when a Shopware backend plugin shares one checkout or payment flow with a separate frontend package, composable layer, or browser-heavy payment SDK integration.
 
+### [17-accessibility-and-template-best-practices.md](shopware-development/references/17-accessibility-and-template-best-practices.md)
+
+Owns deeper storefront accessibility and compliance review guidance:
+
+- WCAG-oriented storefront audit heuristics
+- ADA and U.S. ecommerce baseline framing
+- repeated-component and theme override accessibility pitfalls
+- developer-ready accessibility review evidence format
+- widget, modal, form, and async status anti-patterns
+
+Use this when accessibility, ADA, WCAG, screen-reader, keyboard, focus, form, modal, or storefront compliance work is in scope.
+
 ## How The Skill Works With The Current Model
 
 This skill is meant to improve the model, not narrow it.
+
+### Red line
+
+This skill is a base layer only. It must never constrain Codex from using full model capacity for end-to-end review, deep investigation, broader solution search, or cross-repo analysis when the task requires it.
 
 ### What the skill changes
 
@@ -373,6 +403,7 @@ It adds Shopware-specific guardrails:
 - which Shopware patterns are safe
 - which recurring bugs and security issues to look for
 - which frontend payment flows leak trust into the browser
+- which storefront accessibility and template patterns repeatedly fail in real projects
 
 ### What the skill does not change
 
@@ -385,6 +416,7 @@ The current model still decides:
 - which fix is best
 - how broad or narrow the final solution should be
 - how to explain tradeoffs
+- whether the task requires scanning beyond the initial reference set
 
 ### Why this does not materially limit model power
 
@@ -392,7 +424,7 @@ The protection against over-constraining the model is structural:
 
 - the trigger file is short
 - references are split by concern
-- Codex is instructed to load only relevant reference files
+- Codex is instructed to load only relevant reference files as starting context
 - the skill uses guidance, not rigid templates
 
 In practice, the skill acts like a Shopware senior engineer sitting next to the model and saying:
@@ -401,6 +433,14 @@ In practice, the skill acts like a Shopware senior engineer sitting next to the 
 - do not trust unsafe assumptions
 - do not miss common Shopware traps
 - keep the change safe unless the user clearly wants a migration or redesign
+
+That is different from saying:
+
+- only read the files named in the skill
+- stop once the first likely answer appears
+- avoid broader fixes even when the codebase clearly needs them
+
+Those are not the intended constraints of this skill.
 
 ### The main tradeoff
 
@@ -420,6 +460,7 @@ Use `shopware-development` by default for:
 - plugin analysis
 - plugin fixes
 - feature development in a Shopware plugin
+- accessibility or storefront compliance reviews
 - payment integration work
 - subscription lifecycle and renewal work
 - saved-payment-method or recurring-payment ownership reviews
@@ -499,8 +540,9 @@ Recommended workflow:
 2. Point Codex at the exact plugin or project path.
 3. Invoke `$shopware-development`.
 4. State whether the task is analysis, fix, development, refactor, payment, subscription, storefront, admin, multi-repo review, or audit.
-5. If known, state the exact Shopware version or ask Codex to detect it from `composer.json` and `composer.lock`.
-6. Ask for narrow validation after each chunk.
+5. If accessibility or storefront compliance is in scope, say so explicitly so Codex loads the deeper accessibility references early.
+6. If known, state the exact Shopware version or ask Codex to detect it from `composer.json` and `composer.lock`.
+7. Ask for narrow validation after each chunk.
 
 Good project prompt ingredients:
 
@@ -509,6 +551,7 @@ Good project prompt ingredients:
 - target Shopware version if known
 - whether backward compatibility matters
 - whether the task is a fix, review, or feature
+- whether accessibility, WCAG, ADA, keyboard, focus, form, or modal behavior is part of the request
 - whether one plugin or multiple repos/plugins are part of the flow
 - whether a separate frontend package or composable checkout participates in the flow
 - whether you want the safest path or broader alternatives first
@@ -551,6 +594,12 @@ $shopware-development review these subscription and PSP plugins together with fo
 $shopware-development review this backend plugin and frontend checkout package together with focus on browser-authored payment data, callback authority, token exposure, storage trust, and server-side payment truth.
 ```
 
+### Accessibility and storefront compliance work
+
+```text
+$shopware-development review this storefront for WCAG, keyboard, focus, modal, form, repeated-component, and theme-override issues. Findings first, map material issues to WCAG, and treat the skill as context only, not a cap on end-to-end investigation.
+```
+
 ### Storefront work
 
 ```text
@@ -571,6 +620,12 @@ $shopware-development analyze and fix this plugin. Keep the Shopware guardrails 
 
 This last pattern is the default recommendation for most real work.
 
+### Full-repo review without constraining the model
+
+```text
+$shopware-development do a full end-to-end review of this Shopware project. Use the skill as context and guardrails only, not as a cap on investigation depth, and keep following evidence across all relevant plugins, storefront code, admin code, and related repos.
+```
+
 ### PR description default
 
 If you ask for a PR or merge-request description and do not specify another format, the skill should default to a detailed structure with:
@@ -588,48 +643,27 @@ If you ask for a PR or merge-request description and do not specify another form
 
 ## Versioning And Release
 
-This repository keeps release history in the README and in annotated git tags.
+This repository keeps the canonical detailed release history in [CHANGELOG.md](CHANGELOG.md). The README keeps only the summary view, and annotated release tags should mirror the matching changelog entry.
+
+### `v0.3.0`
+
+- Added [LICENSE](LICENSE) and [CHANGELOG.md](CHANGELOG.md).
+- Added [17-accessibility-and-template-best-practices.md](shopware-development/references/17-accessibility-and-template-best-practices.md) and folded the installed-only accessibility/template learnings back into the repo.
+- Added an explicit red-line rule that the skill is context and guardrails only, never a cap on Codex investigation depth or solution search.
 
 ### `v0.2.0`
 
-Headless and composable frontend payment coverage release.
-
-Detailed changelog:
-
-- Added [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md) as the primary owner for browser trust boundaries, frontend/backend payment contracts, composable checkout flow review, callback-target hardening, and browser-side payment anti-patterns.
-- Expanded [SKILL.md](shopware-development/SKILL.md) so the skill routes headless frontend integrations, browser-storage trust boundaries, and backend plus frontend payment audits explicitly while staying lean.
-- Strengthened [04-plugin-backend.md](shopware-development/references/04-plugin-backend.md) with server-authoritative headless payment rules, including cart or order recalculation before payment-state writes and backend ownership resolution for saved-method references.
-- Strengthened [07-payments.md](shopware-development/references/07-payments.md) with hosted-checkout callback-target hardening, explicit authority boundaries for browser-authored payment identifiers, and timeout-bound provider verification helpers.
-- Strengthened [08-analysis-and-reviews.md](shopware-development/references/08-analysis-and-reviews.md) with separate frontend repo scope coverage, backend plus frontend payment triangulation, and browser-authored versus server-resolved authority mapping.
-- Strengthened [11-quality-and-operations.md](shopware-development/references/11-quality-and-operations.md) with bans on browser-console logging of tokens or payment payloads and on treating browser storage as authoritative payment or vault state.
-- Added a dedicated prompt pattern for paired backend and frontend payment reviews so headless checkout audits are triggered intentionally instead of being treated as generic storefront work.
-- Preserved the existing findings-first review posture, recurring-payment structure, and detailed PR-description default; the new release extends coverage without weakening version-targeting, payment, review, or security rules already in the skill.
+- Added headless/composable frontend payment coverage through [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md).
+- Strengthened payment, backend, review, and operations guidance for browser trust boundaries and backend/frontend payment contracts.
 
 ### `v0.1.0`
 
-First capability expansion release after the initial skill bootstrap.
-
-Detailed changelog:
-
-- Added explicit recurring/subscription and multi-plugin recurring audit support.
-- Added [15-subscriptions-and-recurring-payments.md](shopware-development/references/15-subscriptions-and-recurring-payments.md) as the primary owner for subscription lifecycle safety, recurring-order correctness, saved-method ownership, provider-choice handling, snapshot exposure, and recurring-flow triangulation.
-- Expanded [SKILL.md](shopware-development/SKILL.md) to route subscription, recurring-commerce, and multi-repo review work without turning the trigger file into a monolith.
-- Strengthened [07-payments.md](shopware-development/references/07-payments.md) for PSP-side recurring boundaries, recurring authority, provider recurring references, and support-safe recurring diagnostics.
-- Strengthened [08-analysis-and-reviews.md](shopware-development/references/08-analysis-and-reviews.md) with multi-repo triangulation reviews, cross-flow contract-drift handling, ownership and IDOR prominence, and richer evidence requirements.
-- Strengthened [11-quality-and-operations.md](shopware-development/references/11-quality-and-operations.md) with recurring-log redaction, snapshot minimization, renewal-batch and scheduler safety, translated-label hazards, and heavy recurring-batch hydration checks.
-- Strengthened [13-context-and-commerce.md](shopware-development/references/13-context-and-commerce.md) with subscription/saved-method ownership scoping and recurring total/payment-context recalculation rules.
-- Retained the default detailed PR / merge-request description structure with `QA notes` as a compact test guide.
-- Consolidated local learnings from the installed skill into primary owners instead of scattering repeated rules across multiple references.
-- Kept the skill reference-driven and findings-first for review mode; the recurring additions expand coverage without replacing the concise review posture.
+- Added recurring/subscription and multi-plugin recurring audit coverage through [15-subscriptions-and-recurring-payments.md](shopware-development/references/15-subscriptions-and-recurring-payments.md).
+- Strengthened recurring ownership, review triangulation, and recurring-batch operational rules.
 
 ### `v0.0.1`
 
-Initial release.
-
-- Introduced the installable `shopware-development` skill structure.
-- Split Shopware guidance across 14 focused references to keep the trigger file lean.
-- Established Shopware 6.7-first behavior with explicit 6.6 fallback handling.
-- Added implementation, storefront, admin, payment, review, PHP/Symfony, and operational hardening guidance.
+- Initial public skill release.
 
 ## Future GitHub Installation
 
@@ -651,6 +685,8 @@ When updating this repo:
 
 - keep [SKILL.md](shopware-development/SKILL.md) lean
 - put detailed domain rules into the correct reference file
+- update [CHANGELOG.md](CHANGELOG.md) for every skill-affecting change before release
+- keep the annotated release tag body aligned with the matching changelog entry
 - do not duplicate rules across reference files unless the duplication prevents a real operational mistake
 - update [openai.yaml](shopware-development/agents/openai.yaml) when the skill description materially changes
 - prefer adding rules only when they are repeatable, high-signal, and specific to Shopware work
@@ -666,5 +702,7 @@ If a new rule is discovered from real plugin reviews:
 If the learning belongs primarily to renewals, subscriptions, saved methods, or recurring multi-plugin flows, prefer [15-subscriptions-and-recurring-payments.md](shopware-development/references/15-subscriptions-and-recurring-payments.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
 
 If the learning belongs primarily to a backend plugin plus separate frontend checkout package, browser storage trust boundary, hosted-checkout callback contract, or headless payment review, prefer [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
+
+If the learning belongs primarily to storefront accessibility standards, theme or template accessibility pitfalls, repeated-component semantics, form or modal accessibility, or WCAG-oriented storefront audits, prefer [17-accessibility-and-template-best-practices.md](shopware-development/references/17-accessibility-and-template-best-practices.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
 
 This keeps the skill open-ended, specific, and maintainable.

@@ -5,6 +5,7 @@
 Use review mode when the user asks for:
 
 - a code review
+- an accessibility or storefront compliance audit
 - a security or performance audit
 - architecture analysis
 - regression risk assessment
@@ -16,6 +17,7 @@ Use review mode when the user asks for:
 - Use official Shopware docs, matching core behavior, and Symfony docs as the basis for recommendations.
 - When linking core behavior, pin links to the exact Shopware tag or commit from `composer.lock` when possible.
 - Treat ADRs, issues, forum posts, and blog posts as labeled context unless verified.
+- Treat this skill as review context, not a scan boundary. For full reviews, keep following evidence across the full relevant surface even when the initially loaded references are narrow.
 
 ## Scope Coverage
 
@@ -32,6 +34,8 @@ Scan the full affected scope rather than just the first suspicious file:
 
 Prioritize the highest-risk surfaces first:
 
+If accessibility is the primary review goal, inspect navigation, forms, focus management, modal or offcanvas flows, repeated-card components, and async status messaging before lower-risk storefront detail.
+
 1. security boundaries
 2. ownership or IDOR exposure and state-changing `GET` routes
 3. payment correctness, webhook authenticity, and finalize authority
@@ -40,7 +44,8 @@ Prioritize the highest-risk surfaces first:
 6. cache, invalidation, indexer, queue, and scheduled-task behavior
 7. DAL query shape, migrations, data exposure, and large-instance impact
 8. storefront performance and SEO
-9. extensibility and upgrade safety
+9. accessibility when the request or surface makes it material
+10. extensibility and upgrade safety
 
 ## Severity Model
 
@@ -76,6 +81,8 @@ If backend and frontend repos share one payment flow, trace exactly which values
 Every material finding should include:
 
 - exact file path and symbol, with line references when practical
+- impacted flow or surface
+- WCAG mapping when accessibility is in scope
 - a realistic failure mode or regression scenario
 - the trust boundary that is broken or missing
 - the blast radius in production
@@ -95,6 +102,14 @@ Default format:
 - findings first
 - ordered by severity and impact
 - each finding names the file or surface, the risk, and the smallest safe fix direction
+
+When accessibility is a primary scope:
+
+- group accessibility findings first
+- map each accessibility finding to WCAG criteria
+- distinguish confirmed code defects from runtime verification gaps
+- distinguish local code issues from vendor or third-party widget limitations
+- include code examples when the user asks for implementation-ready review output
 
 For multi-repo or plugin-ecosystem reviews, structure the output as:
 
@@ -118,6 +133,7 @@ Avoid checklist spam. Only report material issues that are actually present.
 - Load `15-subscriptions-and-recurring-payments.md` when subscriptions, renewals, saved methods, or multi-plugin recurring flows are in scope.
 - Load `16-headless-and-composable-frontends.md` when a separate frontend package, composable checkout, or browser-heavy payment contract is in scope.
 - Load `05-storefront-and-themes.md` for storefront-heavy reviews.
+- Load `17-accessibility-and-template-best-practices.md` when accessibility, ADA, WCAG, screen-reader, keyboard, form, focus, or storefront compliance work is in scope.
 - Load `11-quality-and-operations.md` for security, observability, store-readiness, and third-party resilience checks.
 - Load `13-context-and-commerce.md` when sales-channel, currency, tax, or permission scope matters.
 

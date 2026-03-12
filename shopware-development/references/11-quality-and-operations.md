@@ -66,6 +66,7 @@ Official docs:
 - Test against the highest supported Shopware version before release.
 - Keep the binary clean: do not ship unnecessary tests, CI config, editor settings, lock files, or other forbidden packaging artifacts.
 - Register storefront cookies with the cookie consent manager when the feature sets them.
+- For third-party storefront widgets or embeds, verify consent impact, keyboard/focus/status behavior, and ask for a VPAT or vendor accessibility statement when the feature is accessibility-sensitive. See `17-accessibility-and-template-best-practices.md` for the storefront audit baseline.
 - Use store quality guidelines and store review errors as release gates, not as cleanup after the implementation is done.
 
 Official docs:
