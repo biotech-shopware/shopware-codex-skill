@@ -70,6 +70,7 @@ Example:
 - Use `validate()` for prepared-payment invariants such as `orderTransactionId`, server-side prepared references, currency, amount, and merchant-account checks.
 - Key provider operations by `orderTransactionId` or a provider-side unique reference.
 - Persist an operation row before outbound provider calls and back it with unique indexes so retries return the previous result instead of duplicating side effects.
+- Only verified payment handlers, verified callbacks, or reconciliation services may create authoritative local transaction rows or mark payment as successful.
 - Make capture, refund, and webhook processing idempotent with persisted operation state and unique keys.
 - Keep state transitions monotonic. Do not let a later duplicate event regress a final state.
 - Correlate provider state to the correct Shopware transaction before changing anything.
@@ -92,6 +93,7 @@ Example:
 - support secret rotation where the provider workflow needs active plus previous webhook secrets
 - return quickly after enqueueing or persisting idempotency state
 - do not perform slow provider reconciliation inline unless unavoidable
+- keep provider verification helpers timeout-bound and audit-logged
 - keep webhook management behind Admin API plus ACL; webhook endpoints are not admin endpoints
 - build finalize or return URLs from trusted configuration or sales-channel domain data, not raw host headers from the incoming request
 
@@ -115,6 +117,13 @@ Example:
 - Keep recurring-operation identifiers idempotent across retries so duplicate task runs or duplicate callbacks cannot create duplicate provider side effects.
 - If a subscription plugin persists a provider-specific choice, require the save step to be atomic with the payment-method change or clearly recoverable after failure.
 - Review subscription-side helper endpoints with the same rigor as payment handlers, because they often decide which saved method will be charged later.
+
+## Headless and Hosted Payment Contracts
+
+- Load `16-headless-and-composable-frontends.md` when a separate frontend repo, composable checkout, or SDK package participates in the payment flow.
+- Payment-link, hosted-checkout, or wallet-init routes must use trusted configured return URLs. Never accept success, failure, or callback targets from browser request bodies as authoritative.
+- Do not charge the provider first from browser-authored headless payloads and then let Shopware discover the authoritative order state later. Re-establish server authority before money movement or local paid-state writes.
+- Browser-authored transaction IDs, vault IDs, or provider references are hints only until the backend resolves customer ownership and provider state.
 
 ## Performance and Observability
 

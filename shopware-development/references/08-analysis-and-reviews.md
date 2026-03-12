@@ -23,6 +23,7 @@ Scan the full affected scope rather than just the first suspicious file:
 
 - backend services, subscribers, controllers, routes, DAL definitions, migrations, commands, handlers, and DI config
 - storefront Twig, JS, SCSS, theme overrides, and SEO-sensitive surfaces
+- separate frontend repos, composables, SDK loaders, browser storage, client interceptors, and payment UI contracts when they participate in the same flow
 - administration modules, permissions, build compatibility, and app surfaces
 - config, queue, logging, environment-sensitive code, and CI hooks
 - translations and snippet filename conventions when localization is touched
@@ -68,6 +69,7 @@ For each important finding, explain:
 - the cache, queue, or DB blast radius
 
 Also check whether the issue only appears when multiple plugins share one customer flow. If so, call that out as cross-plugin contract drift instead of pretending it is isolated to one repo.
+If backend and frontend repos share one payment flow, trace exactly which values are browser-authored, which are server-resolved, and where provider truth is re-established.
 
 ## Evidence Rules
 
@@ -114,6 +116,7 @@ Avoid checklist spam. Only report material issues that are actually present.
 - Load `02-version-targeting.md` when version-specific behavior is relevant.
 - Load `07-payments.md` for payment reviews.
 - Load `15-subscriptions-and-recurring-payments.md` when subscriptions, renewals, saved methods, or multi-plugin recurring flows are in scope.
+- Load `16-headless-and-composable-frontends.md` when a separate frontend package, composable checkout, or browser-heavy payment contract is in scope.
 - Load `05-storefront-and-themes.md` for storefront-heavy reviews.
 - Load `11-quality-and-operations.md` for security, observability, store-readiness, and third-party resilience checks.
 - Load `13-context-and-commerce.md` when sales-channel, currency, tax, or permission scope matters.
@@ -125,6 +128,7 @@ Use a triangulation pass when multiple repos or plugins share one business flow,
 Before finalizing findings:
 
 - map shared identifiers, custom fields, saved-method records, and provider references across repos
+- map browser-stored values, frontend request payloads, and backend authority boundaries across repos
 - verify which repo is authoritative for each state transition and payment decision
 - check whether one repo assumes validation or ownership enforcement that another repo never performs
 - split local code issues from cross-plugin contract drift so the implementation order stays clear

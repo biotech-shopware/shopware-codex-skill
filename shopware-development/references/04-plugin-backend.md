@@ -93,6 +93,9 @@ Official docs:
 - Apply rate limiting deliberately on abuse-prone or public endpoints, not blindly across trusted internal flows.
 - Never accept raw `Criteria`, arbitrary associations, or client-selected query complexity directly from request payloads. Whitelist filters, pagination, sorting, and include depth explicitly.
 - Keep headless endpoints bounded. Do not return "all snippets", "all entities", or deep graphs without a pagination and payload-size strategy.
+- Public Store API or headless payment routes must never create authoritative local paid transaction rows or decide payment success from browser-authored inputs.
+- For headless payment flows, derive amount, currency, and order context from server-side cart or order recalculation before any provider charge or local payment-state write.
+- Resolve current-customer vaulted or saved-payment records server-side. Do not accept raw browser-stored vault identifiers as authoritative without ownership resolution.
 - Prefer decorating services or inner routes over redefining existing public routes. Route duplication or controller copy-paste often drops ACL, validation, or behavior guarantees.
 - Do not call your own shop's Admin API or Store API over HTTP from backend code in the same project. Inject the underlying services or repositories directly.
 
