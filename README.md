@@ -1,6 +1,6 @@
 # Shopware Codex Skill
 
-Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, payment integrations, storefront work, administration work, and architecture analysis.
+Single-skill repository for `shopware-development`, a Codex skill for Shopware 6 plugin work, project implementation, code review, payment integrations, subscriptions and recurring-commerce flows, storefront work, administration work, and architecture analysis.
 
 The repository is intentionally small:
 
@@ -66,7 +66,8 @@ shopware-skills/
         ├── 11-quality-and-operations.md
         ├── 12-extension-patterns.md
         ├── 13-context-and-commerce.md
-        └── 14-cli-and-dev-tooling.md
+        ├── 14-cli-and-dev-tooling.md
+        └── 15-subscriptions-and-recurring-payments.md
 ```
 
 ### Root files
@@ -94,10 +95,11 @@ shopware-skills/
 - storefront Twig, JavaScript, and SCSS work
 - administration modules and app extensions
 - payment handlers, redirects, webhooks, vaulting, refunds, and payment reviews
+- subscriptions, renewals, saved-payment-method ownership, and recurring-commerce flows
 - Store API and Admin API extension work
 - DAL design, migrations, service architecture, and queue patterns
 - project-level Shopware implementation planning
-- code review and architecture analysis
+- code review, architecture analysis, and multi-plugin recurring audits
 - security, performance, upgrade-safety, and operational hardening
 
 The skill encodes repeatable Shopware-specific constraints that generic coding guidance often misses:
@@ -169,6 +171,7 @@ Defines the delivery shape:
 - narrow validation after each chunk
 - regression control
 - conservative refactoring
+- default detailed PR and merge-request description structure
 
 This is the operational backbone for implementation work.
 
@@ -223,11 +226,11 @@ Owns payment-specific behavior:
 - payment handler flow
 - redirect/finalize/validate lifecycle
 - prepared payment invariants
-- refunds, disputes, and recurring flows
+- refunds, disputes, and PSP-side recurring behavior
 - webhook handling and idempotency
 - vaulting and saved methods
 - operation-row design and state synchronization
-- payment review sharp edges
+- payment review sharp edges and recurring authority boundaries
 
 Use this for any payment plugin work or payment audit.
 
@@ -238,6 +241,7 @@ Owns review mode:
 - finding-first output
 - severity ordering
 - evidence requirements
+- triangulation review for multi-repo or multi-plugin flows
 - blast-radius thinking
 - large-instance review posture
 - version-aware review wording
@@ -279,6 +283,7 @@ Owns cross-cutting security and operational rules:
 - TLS verification
 - external API resilience
 - logging and observability
+- recurring batch and scheduler safety
 - testing and CI expectations
 - store-readiness thinking
 - recurring P0/P1 mistakes seen in plugin reviews
@@ -306,6 +311,7 @@ Owns commerce-context reasoning:
 
 - `Context` vs `SalesChannelContext`
 - multichannel behavior
+- recurring total and payment-context recalculation
 - customer group and pricing effects
 - tax-aware logic
 - B2B and role-sensitive behavior
@@ -324,6 +330,19 @@ Owns CLI and toolchain guidance:
 - avoiding command orchestration via `Symfony Process` in application code
 
 Use this for command work, tooling work, and CI-oriented implementation.
+
+### [15-subscriptions-and-recurring-payments.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/15-subscriptions-and-recurring-payments.md)
+
+Owns recurring and subscription-specific rules:
+
+- subscription lifecycle mutation safety
+- recurring-order correctness
+- saved-payment-method ownership in recurring flows
+- provider choice and recurring reference handling
+- snapshot exposure in subscription or renewal flows
+- cross-plugin triangulation when subscriptions and PSP plugins share one journey
+
+Use this when renewals, subscriptions, saved methods, or multi-plugin recurring reviews are in scope.
 
 ## How The Skill Works With The Current Model
 
@@ -385,11 +404,14 @@ Use `shopware-development` by default for:
 - plugin fixes
 - feature development in a Shopware plugin
 - payment integration work
+- subscription lifecycle and renewal work
+- saved-payment-method or recurring-payment ownership reviews
 - storefront Twig/JS/SCSS changes
 - admin module work
 - Store API/Admin API extensions
 - project implementation planning
 - Shopware code review
+- multi-plugin or multi-repo recurring/payment audits
 - security and performance hardening
 
 ## When Not To Use The Skill
@@ -458,7 +480,7 @@ Recommended workflow:
 1. Open the Shopware project in Codex.
 2. Point Codex at the exact plugin or project path.
 3. Invoke `$shopware-development`.
-4. State whether the task is analysis, fix, development, refactor, payment, storefront, admin, or review.
+4. State whether the task is analysis, fix, development, refactor, payment, subscription, storefront, admin, multi-repo review, or audit.
 5. If known, state the exact Shopware version or ask Codex to detect it from `composer.json` and `composer.lock`.
 6. Ask for narrow validation after each chunk.
 
@@ -469,6 +491,7 @@ Good project prompt ingredients:
 - target Shopware version if known
 - whether backward compatibility matters
 - whether the task is a fix, review, or feature
+- whether one plugin or multiple repos/plugins are part of the flow
 - whether you want the safest path or broader alternatives first
 
 ## Prompt Patterns
@@ -495,6 +518,12 @@ $shopware-development implement this feature in small safe chunks, preserve exte
 
 ```text
 $shopware-development review and fix this payment integration with focus on validate/finalize flow, webhook authenticity, idempotency, refunds, and state sync.
+```
+
+### Recurring and subscription work
+
+```text
+$shopware-development review these subscription and PSP plugins together with focus on ownership, recurring references, renewal authority, saved methods, and cross-plugin contract drift.
 ```
 
 ### Storefront work
@@ -534,24 +563,37 @@ If you ask for a PR or merge-request description and do not specify another form
 
 ## Versioning And Release
 
-This repo is intended to start at:
+This repository keeps release history in the README and in annotated git tags.
 
-```text
-v0.0.1
-```
+### `v0.1.0`
 
-Release meaning:
+First capability expansion release after the initial skill bootstrap.
 
-- the skill is installable locally
-- the reference structure is stable
-- the README explains operation and usage
-- the repo is ready to be connected to a remote later
+Detailed changelog:
 
-The release is local-first. A remote can be added later without changing the skill layout.
+- Added explicit recurring/subscription and multi-plugin recurring audit support.
+- Added [15-subscriptions-and-recurring-payments.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/15-subscriptions-and-recurring-payments.md) as the primary owner for subscription lifecycle safety, recurring-order correctness, saved-method ownership, provider-choice handling, snapshot exposure, and recurring-flow triangulation.
+- Expanded [SKILL.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/SKILL.md) to route subscription, recurring-commerce, and multi-repo review work without turning the trigger file into a monolith.
+- Strengthened [07-payments.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/07-payments.md) for PSP-side recurring boundaries, recurring authority, provider recurring references, and support-safe recurring diagnostics.
+- Strengthened [08-analysis-and-reviews.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/08-analysis-and-reviews.md) with multi-repo triangulation reviews, cross-flow contract-drift handling, ownership and IDOR prominence, and richer evidence requirements.
+- Strengthened [11-quality-and-operations.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/11-quality-and-operations.md) with recurring-log redaction, snapshot minimization, renewal-batch and scheduler safety, translated-label hazards, and heavy recurring-batch hydration checks.
+- Strengthened [13-context-and-commerce.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/13-context-and-commerce.md) with subscription/saved-method ownership scoping and recurring total/payment-context recalculation rules.
+- Retained the default detailed PR / merge-request description structure with `QA notes` as a compact test guide.
+- Consolidated local learnings from the installed skill into primary owners instead of scattering repeated rules across multiple references.
+- Kept the skill reference-driven and findings-first for review mode; the recurring additions expand coverage without replacing the concise review posture.
+
+### `v0.0.1`
+
+Initial release.
+
+- Introduced the installable `shopware-development` skill structure.
+- Split Shopware guidance across 14 focused references to keep the trigger file lean.
+- Established Shopware 6.7-first behavior with explicit 6.6 fallback handling.
+- Added implementation, storefront, admin, payment, review, PHP/Symfony, and operational hardening guidance.
 
 ## Future GitHub Installation
 
-Once the repo exists on GitHub, it will be installable by path because the skill root is already correct:
+The repository is already installable by path because the skill root is correct:
 
 ```bash
 install-skill-from-github.py --repo biotech-shopware/shopware-codex-skill --path shopware-development
@@ -580,5 +622,7 @@ If a new rule is discovered from real plugin reviews:
 2. add it there once
 3. avoid repeating it elsewhere
 4. only update [SKILL.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/SKILL.md) if the top-level routing or trigger behavior needs to change
+
+If the learning belongs primarily to renewals, subscriptions, saved methods, or recurring multi-plugin flows, prefer [15-subscriptions-and-recurring-payments.md](/Users/vi.khliupko/Documents/Codex/shopware-skills/shopware-development/references/15-subscriptions-and-recurring-payments.md) as the owner and leave only the shortest necessary cross-reference elsewhere.
 
 This keeps the skill open-ended, specific, and maintainable.

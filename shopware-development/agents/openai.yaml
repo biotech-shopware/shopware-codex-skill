@@ -1,4 +1,4 @@
 interface:
   display_name: "Shopware Development"
-  short_description: "Shopware 6.6/6.7 plugin, project, payment, and review skill"
-  default_prompt: "Use $shopware-development to plan, implement, harden, or review a Shopware 6 change."
+  short_description: "Shopware 6.6/6.7 plugin, payment, recurring, and review skill"
+  default_prompt: "Use $shopware-development to plan, implement, harden, or review a Shopware 6 change, including recurring flows and multi-plugin audits."
