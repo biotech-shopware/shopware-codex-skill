@@ -110,8 +110,7 @@ Good: if the project is self-hosted and the flow needs DAL entities, queues, and
 - Keep `manifest.xml` complete and least-privilege. Do not request permissions "just in case".
 - Declare only the hosts, cookies, webhooks, payment methods, tax providers, and custom fields the app actually needs.
 - Keep compatibility explicit and align manifest features with the supported Shopware versions.
-- Example
-  If the app only needs to read orders and trigger one action button, do not request create/update/delete permissions across unrelated entities.
+- If the app only needs to read orders and trigger one action button, do not request create/update/delete permissions across unrelated entities.
 
 ## App Webhooks
 
@@ -119,8 +118,7 @@ Good: if the project is self-hosted and the flow needs DAL entities, queues, and
 - Make handlers idempotent and safe for retries.
 - Return success only after the event is durably accepted; return failure when you need Shopware to retry.
 - Queue or defer slow downstream sync logic.
-- Example
-  `product.written` should upsert sync state keyed by the Shopware entity ID instead of blindly creating duplicate remote records.
+- `product.written` should upsert sync state keyed by the Shopware entity ID instead of blindly creating duplicate remote records.
 
 ## Action Buttons and Admin Actions
 
@@ -128,8 +126,7 @@ Good: if the project is self-hosted and the flow needs DAL entities, queues, and
 - Handle single-item and bulk actions deliberately.
 - Return the right action response type for UX: notification, modal, new tab, or reload.
 - Keep privileged writes on the app backend or Admin API; never trust client-side action payloads by themselves.
-- Example
-  A "Sync to ERP" action should return a success or error notification, while a "Show report" action can open a modal or new tab.
+- A "Sync to ERP" action should return a success or error notification, while a "Show report" action can open a modal or new tab.
 
 ## App Scripts
 
