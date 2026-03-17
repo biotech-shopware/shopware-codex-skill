@@ -13,6 +13,24 @@ Example:
 - a sync command
   Accept IDs optionally, add `--limit` and `--since`, confirm large runs, and report a compact success/failure summary.
 
+```php
+// Preferred: command stays orchestration-only and delegates business work
+final class SyncCommand extends Command
+{
+    public function __construct(private readonly SyncService $syncService)
+    {
+        parent::__construct();
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $this->syncService->sync((int) $input->getOption('limit'));
+
+        return Command::SUCCESS;
+    }
+}
+```
+
 ## Static Analysis and Quality Gates
 
 - Use the repo's existing quality toolchain first.
@@ -31,3 +49,8 @@ Example:
 - For extension packages, include packaging and validation checks before release when the project uses them.
 - Keep quality gates incremental so teams can improve rather than disable tooling wholesale.
 - Add sanity checks for duplicate handler registration, container compilation, and command wiring when background jobs or scheduled tasks are involved.
+
+```text
+Bad: add a new command and scheduled task but only run php -l on one file.
+Good: run the targeted test or command check plus one container-boot or wiring sanity check.
+```

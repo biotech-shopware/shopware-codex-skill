@@ -26,6 +26,22 @@ Official docs:
 - A provider outage must not crash the storefront, cart, checkout, or core admin workflows.
 - Public callback or authorization endpoints need explicit hardening: signed tokens, bounded input, rate limiting, and narrow purpose.
 
+Example patterns:
+
+```php
+// Bad: inline provider call in checkout path with no timeout or fallback
+$quote = $this->shippingClient->fetchRates($cartPayload);
+$cart->setExtension('shippingQuote', $quote);
+```
+
+```php
+// Preferred: bounded timeout plus graceful fallback or cached quote
+$quote = $this->shippingQuoteService->resolveQuote($cartContext);
+if ($quote !== null) {
+    $cart->setExtension('shippingQuote', $quote);
+}
+```
+
 ### Shipping and Tax Notes
 
 - Do not block checkout on shipping-rate lookups; cache or decouple them where possible.
@@ -60,6 +76,12 @@ Official docs:
 - Validate and package distributable extensions with Shopware CLI when the project uses it.
 - For 6.7.3+ translation work, add `translation:lint-filenames` and `snippet:validate` to CI when possible.
 - Run at least one container-compile or boot-path check when service wiring, decorators, handlers, or scheduled tasks changed.
+
+Concrete CI example:
+
+```text
+Good: after changing services.xml, a handler, and a scheduled task, run targeted tests plus one container boot or compile-path check instead of relying only on php -l.
+```
 
 ## Store Readiness
 

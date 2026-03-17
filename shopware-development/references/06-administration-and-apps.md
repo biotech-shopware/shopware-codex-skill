@@ -22,6 +22,20 @@ Use the lightest surface that fits the requirement.
 - Never expose Admin API tokens, client secrets, or equivalent privileged credentials to storefront JavaScript or Twig.
 - Do not make the storefront call custom Admin API routes directly. Bridge through a backend route with the correct customer-facing validation or use the Store API where appropriate.
 
+Example patterns:
+
+```js
+// Bad: storefront bridge to privileged admin route
+fetch('/api/_action/my-plugin/rebuild-index', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${adminToken}` },
+});
+```
+
+```text
+Preferred: keep the privileged action in the admin or app backend, protect it with ACL or signed app requests, and expose only customer-safe storefront routes through Store API or another ownership-checked backend route.
+```
+
 Official docs:
 
 - administration guide index: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/`
@@ -71,6 +85,25 @@ Official docs:
 
 - app administration: `https://developer.shopware.com/docs/guides/plugins/apps/administration/`
 - add custom module to an app: `https://developer.shopware.com/docs/guides/plugins/apps/administration/add-custom-module.html`
+
+## Cloud and App-First Guidance
+
+- If the target is Shopware Cloud, assume app-first constraints unless the project proves it is self-hosted.
+- Prefer apps when the requirement fits manifest-declared permissions, Admin API or Store API access, webhooks, action buttons, custom modules, or app scripts.
+- Prefer plugins only when the project is self-hosted and the feature truly needs plugin-only capabilities such as PHP runtime extensions, DAL entity definitions, migrations, or storefront plugin code.
+- Do not design cloud features around filesystem writes, direct DB access, or plugin-only extension points that cannot exist in the app model.
+
+Concrete scope examples:
+
+```text
+Bad: pick a plugin admin module for a cloud-compatible settings form that only needs config, action buttons, and one backend webhook.
+Good: use an app with manifest permissions, a custom module, and a signed backend for the webhook or action flow.
+```
+
+```text
+Bad: force an app script to own a workflow that actually needs durable operational state, batch processing, and server-side retries.
+Good: if the project is self-hosted and the flow needs DAL entities, queues, and PHP services, keep it in a plugin.
+```
 
 ## App Manifest Rules
 

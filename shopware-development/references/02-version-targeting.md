@@ -49,6 +49,47 @@ Use the least risky path:
 - If the implementation must differ, isolate the version-sensitive seam in one service or adapter.
 - If the task would require a wide migration, stop and name it as a separate chunk rather than mixing it into a feature change.
 
+## Migration Playbook
+
+When the task is an upgrade, scan first and migrate second.
+
+Check these surfaces explicitly:
+
+- payment handlers, prepared-payment validation, and redirect/finalize flow
+- admin build stack and state management assumptions
+- copied Twig templates or old storefront JS hooks
+- snippet filename conventions and fallback behavior
+- service decoration against fragile or deprecated core services
+- tests that depend on older bootstrap or admin assumptions
+
+Concrete scan examples:
+
+Example patterns:
+
+```text
+Bad: "While touching this admin module, also migrate it from Vuex to Pinia."
+Good: Keep the feature fix version-neutral unless the task is explicitly the admin migration.
+```
+
+```text
+Bad: On 6.7.3+, keep duplicating every language file as messages.en-GB.json and messages.de-DE.json without base files.
+Good: Move shared translations into messages.en.base.json or messages.de.base.json and keep country-specific files only as overrides where needed.
+```
+
+```text
+Bad: Reuse a 6.7 payment example in a 6.6 plugin without re-checking the archived payment guide.
+Good: Verify the exact 6.6 payment-handler contract first, then isolate any version-sensitive seam in one service or adapter.
+```
+
+## Replacement Strategy
+
+Prefer small, explicit version seams over scattered conditionals:
+
+- one adapter for version-sensitive admin build logic
+- one payment-orchestration seam for handler contract differences
+- one snippet or translation compatibility layer when 6.6 and 6.7.3+ filename rules differ
+- one dedicated migration chunk when a copied legacy storefront template must be brought back in line with newer core markup
+
 ## Official Anchors
 
 Start here when versioned behavior matters:

@@ -21,6 +21,17 @@ If the answers are unclear, keep tracing the flow before proposing a fix.
 - Do not let request interceptors, debug hooks, or shared API clients widen credential exposure by logging headers, bodies, or tokens.
 - Treat browser-authored payment, vault, or redirect data as untrusted until the backend re-resolves it in the correct customer and sales-channel scope.
 
+Example patterns:
+
+```js
+// Bad: browser storage becomes saved-method authority
+localStorage.setItem('selectedVaultId', providerVaultId);
+```
+
+```text
+Preferred: persist only an opaque server-issued hint if truly needed, then resolve the current customer's saved method through an ownership-checked backend endpoint before payment or subscription mutation.
+```
+
 ## Frontend Data Flow and Performance
 
 - Defer PSP token fetches, vault-profile fetches, and similar provider calls until the customer selects the payment method or actively pays unless the UX truly requires earlier loading.

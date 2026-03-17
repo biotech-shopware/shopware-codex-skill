@@ -88,6 +88,7 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - security reference: `https://developer.shopware.com/docs/resources/references/security.html`
 - logging: `https://developer.shopware.com/docs/guides/hosting/configurations/observability/logging.html`
 - PHPUnit guide: `https://developer.shopware.com/docs/guides/plugins/plugins/testing/php-unit.html`
+- PHP integration testing: `https://developer.shopware.com/docs/guides/plugins/plugins/testing/php-integration.html`
 - Shopware CLI: `https://developer.shopware.com/docs/products/cli/`
 - Shopware CLI validation: `https://developer.shopware.com/docs/products/cli/validation.html`
 - add rate limiter to API route: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/rate-limiter/add-rate-limiter-to-api-route.html`
@@ -95,6 +96,7 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - store review errors: `https://developer.shopware.com/docs/guides/development/monetization/store-review-errors.html`
 - translation extension upgrade: `https://developer.shopware.com/docs/resources/references/upgrades/core/translation/extension-translation.html`
 - fallback language selection: `https://developer.shopware.com/docs/concepts/translations/fallback-language-selection.html`
+- snippets concept: `https://developer.shopware.com/docs/concepts/translations/`
 
 ## Symfony
 
@@ -109,3 +111,22 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - add custom flow trigger: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/flow/add-flow-builder-trigger.html`
 - add CMS element: `https://developer.shopware.com/docs/guides/plugins/plugins/content/cms/add-cms-element.html`
 - add custom rules: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/rule/add-custom-rules.html`
+
+## Core Source Anchors
+
+Use matching Shopware core when the official docs are thin or a behavior is version-sensitive:
+
+- cart processing order: `src/Core/Checkout/Cart/Processor.php`
+- cart collector interface: `src/Core/Checkout/Cart/CartDataCollectorInterface.php`
+- cart processor interface: `src/Core/Checkout/Cart/CartProcessorInterface.php`
+- Shopware integration test traits: `src/Core/Framework/Test/TestCaseBase/`
+- repository mocking ADR: `adr/2023-04-01-mocking-repositories.md`
+- Elasticsearch product definition: `src/Elasticsearch/Product/ElasticsearchProductDefinition.php`
+- OpenSearch admin search ADR: `adr/2026-01-28-apply-opensearch-in-admin-api.md`
+
+## Maintenance
+
+- Treat this file as a jump table, not a frozen archive.
+- Re-check official links during every release that changes scope, version targeting, or major references.
+- If a link is stale, update the path instead of silently deleting the topic.
+- When official docs are missing or too thin, add a matching core-source anchor rather than inventing unsupported behavior.

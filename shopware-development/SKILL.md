@@ -1,13 +1,13 @@
 ---
 name: shopware-development
-description: Plan, implement, refactor, or review Shopware 6 changes with Shopware 6.7 as the default target and explicit Shopware 6.6 compatibility handling. Use for plugin development, theme and template work, storefront Twig/JS/SCSS changes, accessibility or storefront compliance reviews, headless or composable frontend integrations, administration modules, app extensions, payment integrations, subscriptions and recurring-commerce flows, saved-payment-method ownership issues, CMS elements, import/export work, media handling, Rule Builder conditions, CLI and tooling tasks, multichannel context issues, project implementation planning, migrations, performance/security hardening, and Shopware code reviews or multi-plugin architecture analysis.
+description: Plan, implement, refactor, or review Shopware 6 changes with Shopware 6.7 as the default target and explicit Shopware 6.6 compatibility handling. Use for plugin development, cart and checkout pipeline work, theme and template work, storefront Twig/JS/SCSS changes, accessibility or storefront compliance reviews, headless or composable frontend integrations, administration modules, app extensions, payment integrations, subscriptions and recurring-commerce flows, saved-payment-method ownership issues, testing patterns, search and indexing work, i18n and snippet handling, CMS elements, import/export work, media handling, Rule Builder conditions, CLI and tooling tasks, multichannel context issues, project implementation planning, migrations, performance/security hardening, and Shopware code reviews or multi-plugin architecture analysis.
 ---
 
 # Shopware Development
 
 ## Overview
 
-Use this skill as base context and guardrails for Shopware work. It must never constrain Codex from using full model capacity for end-to-end review, deep investigation, or broader solution search when the codebase or request requires it. It distills the attached Shopware guides and agent pack into a small workflow layer plus clustered references, with official Shopware docs as the authority when guidance conflicts. Use it for recurring commerce, saved-payment-method flows, headless payment frontends, accessibility or storefront compliance reviews, and multi-plugin audits where backend plugins and separate frontend packages share one customer journey.
+Use this skill as base context and guardrails for Shopware work. It must never constrain Codex from using full model capacity for end-to-end review, deep investigation, or broader solution search when the codebase or request requires it. It distills the attached Shopware guides and agent pack into a small workflow layer plus clustered references, with official Shopware docs as the authority when guidance conflicts. Use it for recurring commerce, saved-payment-method flows, headless payment frontends, cart and checkout internals, testing surfaces, search/indexing work, i18n/snippet handling, accessibility or storefront compliance reviews, and multi-plugin audits where backend plugins and separate frontend packages share one customer journey.
 
 ## Source Discipline
 
@@ -24,25 +24,42 @@ Treat attached source material, ADRs, issues, forums, and blog posts as context 
 1. Detect the target Shopware version from root `composer.json`, plugin/theme `composer.json`, and `composer.lock`.
 2. Classify the task before reading references:
    - implementation or refactor
+   - cart or checkout pipeline work
    - storefront or theme work
    - accessibility or storefront compliance review
    - headless or composable frontend work
    - administration or app extension work
    - payment work
    - subscription or recurring-commerce flow
+   - testing or fixture work
+   - search, indexing, or listing work
+   - translations, snippets, or localization work
    - integration or multi-repo review
    - review or architecture analysis
 3. Load only the relevant reference files for that task. Treat them as starting context, not a hard boundary. Keep following code, evidence, configs, adjacent repos, and official docs when the task requires it.
-4. If the task mentions accessibility, ADA, WCAG, VPAT, screen readers, keyboard support, forms, focus, modals, storefront UX, or theme/frontend audits, always load:
+4. Use this routing table before broadening the scan:
+
+| Task signal | Always load | Also load if |
+| --- | --- | --- |
+| `payment`, `PSP`, `webhook`, `refund`, `vault` | `07` | `15` for recurring, `16` for separate frontend, `18` for cart/checkout payment coupling |
+| `cart`, `checkout`, `line item`, `delivery`, `promotion` | `18` | `04` for backend architecture, `07` for payment, `13` for pricing scope |
+| `Twig`, `storefront`, `theme`, `SCSS`, `storefront JS` | `05` | `17` for accessibility, `16` for separate frontend |
+| `admin`, `app`, `cloud`, `manifest`, `Pinia`, `Vite` | `06` | `02` for migration or version split, `21` for snippets |
+| `review`, `audit`, `analysis` | `08` | add the domain refs that match the touched flow |
+| `test`, `PHPUnit`, `fixture`, `Store API test` | `19` | `18` for cart, `07` for payments, `20` for indexing |
+| `search`, `OpenSearch`, `Elasticsearch`, `listing` | `20` | `04` for DAL, `13` for commerce scope |
+| `snippet`, `translation`, `locale`, `i18n` | `21` | `05` for storefront text, `06` for admin snippets, `02` for 6.7.3+ base snippets |
+
+5. If the task mentions accessibility, ADA, WCAG, VPAT, screen readers, keyboard support, forms, focus, modals, storefront UX, or theme/frontend audits, always load:
    - `references/05-storefront-and-themes.md`
    - `references/10-official-docs-map.md`
    - `references/17-accessibility-and-template-best-practices.md`
-5. Inventory mutation surfaces, trust boundaries, ownership boundaries, browser-authored data, cross-plugin contracts, and accessibility-sensitive UI patterns before proposing fixes.
-6. Plan the smallest safe change set. One concern per chunk: versioning, data model, API, UI, payment flow, recurring flow, accessibility remediation, or review findings. If the codebase or user request requires a broader change, expand intentionally instead of forcing an artificial micro-change.
-7. Preserve extension points and existing project patterns unless the task explicitly includes a migration.
-8. For multi-repo reviews, do not finalize findings until a triangulation pass checks how identifiers, saved methods, browser-stored values, custom fields, webhook state, recurring references, and shared frontend accessibility contracts move across repos.
-9. Validate after each chunk with the narrowest useful checks.
-10. Report version assumptions, what changed, what was verified, and any remaining regression risk.
+6. Inventory mutation surfaces, trust boundaries, ownership boundaries, browser-authored data, cross-plugin contracts, and accessibility-sensitive UI patterns before proposing fixes.
+7. Plan the smallest safe change set. One concern per chunk: versioning, data model, cart pipeline, API, UI, payment flow, recurring flow, search/indexing, accessibility remediation, or review findings. If the codebase or user request requires a broader change, expand intentionally instead of forcing an artificial micro-change.
+8. Preserve extension points and existing project patterns unless the task explicitly includes a migration.
+9. For multi-repo reviews, do not finalize findings until a triangulation pass checks how identifiers, saved methods, browser-stored values, custom fields, webhook state, recurring references, snippet or translation contracts, and shared frontend accessibility contracts move across repos.
+10. Validate after each chunk with the narrowest useful checks.
+11. Report version assumptions, what changed, what was verified, and any remaining regression risk.
 
 ## Execution Rules
 
@@ -68,6 +85,7 @@ Treat attached source material, ADRs, issues, forums, and blog posts as context 
 - Keep scheduled tasks, reminders, and renewal scans batched, bounded, and keyed off technical names or immutable state, not translated labels.
 - Log correlation IDs and redacted metadata, not provider payloads, tokens, signatures, or customer PII.
 - Keep template logic cheap, admin UIs thin, and background work asynchronous when possible.
+- Use the inline examples in the owning reference files as starting patterns, not as a ceiling on implementation design. Adapt them to the exact plugin, Shopware version, and project conventions.
 - If the repo uses local `AGENTS.md` files or the user asks for them, apply the layered guidance from `references/01-source-hierarchy.md`.
 
 ## Reference Map
@@ -101,13 +119,21 @@ Read only the files needed for the current task:
 - `references/11-quality-and-operations.md`
   Use for security baseline, external API resilience, observability, testing, recurring-batch safety, store readiness, and the common failure modes called out in the general plugin guide.
 - `references/12-extension-patterns.md`
-  Use for plugin configuration, Flow Builder and business events, CMS elements, import/export profiles, media handling, and Rule Builder extensions.
+  Use for plugin configuration, Flow Builder and business events, CMS elements, import/export profiles, media handling, mail or notification patterns, product or catalog extension choices, and Rule Builder extensions.
 - `references/13-context-and-commerce.md`
   Use for `Context` vs `SalesChannelContext`, multichannel behavior, recurring totals, pricing, customer groups, tax state, and sales-channel-aware logic.
 - `references/14-cli-and-dev-tooling.md`
   Use for Symfony console commands, static analysis, code quality tooling, and local developer workflows.
 - `references/15-subscriptions-and-recurring-payments.md`
   Use for subscription lifecycle reviews, recurring-order correctness, saved-payment-method ownership, provider contract drift, and multi-plugin recurring audits.
+- `references/18-cart-and-checkout-pipeline.md`
+  Use for collectors, processors, validators, line item creation, delivery and promotion interactions, cart recalculation, and checkout hot-path rules.
+- `references/19-testing-patterns.md`
+  Use for integration tests, Store API tests, fixtures, repository mocking, migration tests, and Shopware-specific test bootstrap behavior.
+- `references/20-search-and-indexing.md`
+  Use for Elasticsearch or OpenSearch extension points, product search or listing behavior, mapping and fetch symmetry, reindexing, and search fallbacks.
+- `references/21-internationalization-and-snippets.md`
+  Use for storefront or admin snippets, translation associations, language-aware DAL behavior, fallback inheritance, and 6.7 base-snippet conventions.
 
 ## Output Expectations
 

@@ -52,8 +52,28 @@ Keep each concern in one place:
 - Configuration, Flow Builder triggers, CMS patterns, import/export, media, and Rule Builder belong in `12-extension-patterns.md`.
 - Context handling, multichannel behavior, pricing, and sales-channel-aware logic belong in `13-context-and-commerce.md`.
 - Console commands and development tooling belong in `14-cli-and-dev-tooling.md`.
+- Subscription lifecycle and recurring-commerce orchestration belong in `15-subscriptions-and-recurring-payments.md`.
+- Headless or composable frontend payment and trust-boundary rules belong in `16-headless-and-composable-frontends.md`.
+- Deep storefront accessibility heuristics and review patterns belong in `17-accessibility-and-template-best-practices.md`.
+- Cart, checkout, delivery, line item, and promotion pipeline rules belong in `18-cart-and-checkout-pipeline.md`.
+- Shopware-specific testing patterns belong in `19-testing-patterns.md`.
+- Search, Elasticsearch, and OpenSearch rules belong in `20-search-and-indexing.md`.
+- Snippet, translation, and localization rules belong in `21-internationalization-and-snippets.md`.
 
 Do not repeat the same rule in multiple files unless the split would otherwise hide a critical safety boundary. Use short cross-references instead.
+
+## Ownership Examples
+
+Use these examples to decide where a new learning belongs:
+
+| New learning | Primary owner | Keep elsewhere |
+| --- | --- | --- |
+| `searchIds()` versus `search()` in DAL loops | `04-plugin-backend.md` | short cross-reference from `18` when the loop is inside cart logic |
+| collector versus processor responsibilities | `18-cart-and-checkout-pipeline.md` | short cross-reference from `04` or `07` |
+| Store API functional test with `SalesChannelApiTestBehaviour` | `19-testing-patterns.md` | short cross-reference from `11` |
+| extending Elasticsearch product mapping and fetch logic together | `20-search-and-indexing.md` | short cross-reference from `04` |
+| `messages.en.base.json` and admin/storefront snippet ownership | `21-internationalization-and-snippets.md` | short cross-reference from `05` or `06` |
+| detailed PR template or findings template | `03-implementation-workflow.md` or `08-analysis-and-reviews.md` | no duplicate second owner |
 
 ## Attached Source Coverage
 

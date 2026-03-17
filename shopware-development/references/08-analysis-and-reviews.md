@@ -119,6 +119,33 @@ For multi-repo or plugin-ecosystem reviews, structure the output as:
 
 Avoid checklist spam. Only report material issues that are actually present.
 
+Literal findings template:
+
+```md
+### [P0/P1/P2] Title
+
+- **File:** `/absolute/path/to/file.php:123`
+- **Flow:** `checkout -> payment -> webhook`
+- **Failure mode:** [what breaks or what can be abused]
+- **Blast radius:** [which users or systems are affected and at what scale]
+- **Smallest safe fix:** [what to change without forcing a rewrite]
+- **Regression risk:** [what adjacent surface could still break]
+- **Validation:** [how to verify the fix]
+```
+
+Accessibility-first variant:
+
+```md
+### [P0/P1/P2] Accessibility Title
+
+- **Surface:** `checkout confirm`
+- **WCAG:** `4.1.2 Name, Role, Value`
+- **Failure mode:** [keyboard, screen-reader, focus, label, or status issue]
+- **Blast radius:** [which journey is blocked or degraded]
+- **Smallest safe fix:** [semantic HTML, focus handling, status region, etc.]
+- **Validation:** [keyboard path, browser/AT verification, and code-level check]
+```
+
 ## Writing Style
 
 - Write like a senior engineer, not a pasted system checklist.

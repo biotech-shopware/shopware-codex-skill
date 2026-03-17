@@ -144,3 +144,57 @@ Default QA coverage should include:
 - any production vs sandbox differences
 
 If a section is truly not applicable, say so briefly rather than deleting the section. The default is completeness.
+
+Literal template:
+
+```md
+## Description
+
+### Problem
+
+[Explain the concrete defect, risk, missing capability, or regression surface.]
+
+### Why this is critical
+
+[Explain the trust boundary, operational impact, production blast radius, or customer-visible failure.]
+
+### Implementation
+
+[Describe the actual change path in complete sentences. Mention the real control flow, persistence changes, and any new validation.]
+
+### Affected plugin areas
+
+- [surface or subsystem]
+- [surface or subsystem]
+
+### Risk and regression assessment
+
+[State the realistic rollout risk and the main remaining failure condition.]
+
+### Validation performed
+
+- [exact command or targeted manual validation]
+- [exact command or targeted manual validation]
+
+### QA notes
+
+[Environment or config notes.]
+
+[Primary success-path guide.]
+
+[Primary failure-path or rejection-path guide.]
+
+[Adjacent regression checks.]
+```
+
+Literal QA-guide mini template:
+
+```md
+QA notes:
+
+- Config: [sandbox vs production, flags, credentials, snippets, indexes, caches]
+- Happy path: [exact path to verify]
+- Negative path: [invalid payload, missing signature, ACL denial, empty state, etc.]
+- Regression checks: [adjacent flow that could break]
+- Version caveat: [6.6 vs 6.7 or migration split if relevant]
+```

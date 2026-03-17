@@ -67,6 +67,65 @@ Open official docs when the task touches service wiring:
 - Do not use mutable JSON payload fields on line items, orders, or logs as primary operational query state. If you need to query or deduplicate by that state, model it in indexed columns or a custom entity instead.
 - Merge existing custom fields instead of overwriting the full array unless replacing everything is intentional and safe.
 
+Entity extension decision matrix:
+
+| Need | Prefer | Avoid when |
+| --- | --- | --- |
+| a few merchant-managed values on an existing entity | custom fields | the data drives high-volume writes, deduplication, or indexed operational queries |
+| structured fields attached to an existing entity with code ownership | entity extension | the state really has its own lifecycle or needs standalone queries |
+| standalone operational state, dedupe keys, sync history, or batch processing | custom entity | the data is just editorial decoration on an existing entity |
+| merchant-defined structure in 6.7+ where dynamic entities truly fit the requirement | dynamic custom entities | the requirement needs plugin-owned behavior, strict invariants, or broad 6.6 support |
+
+Example patterns:
+
+```php
+// Bad: full entity hydration just to collect IDs inside a loop
+foreach ($customers as $customer) {
+    $criteria = new Criteria();
+    $criteria->addFilter(new EqualsFilter('customerId', $customer->getId()));
+
+    $orders = $this->orderRepository->search($criteria, $context);
+    $this->syncOrderIds($orders->getIds());
+}
+```
+
+```php
+// Preferred: batch IDs first, then fetch only what is needed
+$criteria = new Criteria();
+$criteria->addFilter(new EqualsAnyFilter('customerId', $customerIds));
+
+$orderIds = $this->orderRepository->searchIds($criteria, $context)->getIds();
+$this->syncOrderIds($orderIds);
+```
+
+```php
+// Bad: loading full associations and blobs for an admin list
+$criteria = new Criteria();
+$criteria->addAssociation('lineItems');
+$criteria->addAssociation('transactions');
+$criteria->addAssociation('addresses');
+```
+
+```php
+// Preferred: bounded list query plus targeted fields
+$criteria = new Criteria();
+$criteria->setLimit(50);
+$criteria->setOffset($offset);
+$criteria->addAssociation('transactions.stateMachineState');
+$criteria->addFields(['id', 'orderNumber', 'createdAt']);
+```
+
+```php
+// Preferred: merge custom fields instead of replacing unrelated state
+$payload = [
+    'id' => $orderId,
+    'customFields' => [
+        ...($order->getCustomFields() ?? []),
+        'my_plugin_sync_state' => 'queued',
+    ],
+];
+```
+
 ## Migrations and Schema Safety
 
 - Keep schema changes idempotent where possible.
@@ -103,6 +162,8 @@ Official docs:
 
 - add Store API route: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/store-api/add-store-api-route.html`
 - add cart collector/processor: `https://developer.shopware.com/docs/guides/plugins/plugins/checkout/cart/add-cart-processor-collector.html`
+
+Keep detailed collector, processor, validator, delivery, and promotion pipeline rules in `18-cart-and-checkout-pipeline.md` instead of expanding this file with cart internals.
 
 ## Performance, Cache, and Async
 

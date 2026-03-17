@@ -58,3 +58,30 @@
 - Do not identify your business logic by translated labels or by reusing a generic line item type such as `credit`.
 - Example
   Store credit should be a dedicated `store_credit` line item with explicit payload or extensions, not a generic credit item guessed by label text like "Store credit discount".
+
+## Mail and Notification Patterns
+
+- Keep transactional email ownership explicit. Do not hardcode mail sends across random subscribers when Flow Builder, business events, or one orchestration service should own the decision.
+- Customize mail templates and payloads through stable extension points, not copy-pasted mail-rendering logic in controllers.
+- Do not block hot paths on email delivery when the business flow can durably queue or defer the send.
+
+Example pattern:
+
+```text
+Bad: send mail directly from every state-transition subscriber that notices the same order change.
+Good: dispatch one business event after the state is committed and let Flow Builder or one mail orchestration path send the notification.
+```
+
+## Product and Catalog Extension Choices
+
+- Use custom fields for light editorial product metadata.
+- Use entity extensions when the product needs structured extra fields but the lifecycle still belongs to the product.
+- Use custom entities when the domain needs its own lifecycle, synchronization, batching, or indexes.
+- Keep variant, property, stream, and cross-selling logic aligned with existing Shopware catalog models before inventing plugin-side shortcuts.
+
+Example pattern:
+
+```text
+Bad: store variant-generation rules and stream membership as unindexed product customFields and query them at scale.
+Good: use Shopware property groups, product streams, or a dedicated custom entity when the data drives operational catalog behavior.
+```

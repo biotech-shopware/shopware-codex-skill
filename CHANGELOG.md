@@ -6,6 +6,34 @@ All notable changes to this repository are documented here.
 
 - No unreleased changes yet.
 
+## [v0.4.0] - 2026-03-17
+
+### Added
+
+- Added [18-cart-and-checkout-pipeline.md](shopware-development/references/18-cart-and-checkout-pipeline.md) as the primary owner for cart collectors, processors, validators, line-item creation, delivery or promotion interactions, recalculation boundaries, and checkout hot-path rules.
+- Added [19-testing-patterns.md](shopware-development/references/19-testing-patterns.md) as the primary owner for Shopware-specific test surfaces, including `IntegrationTestBehaviour`, `SalesChannelApiTestBehaviour`, fixtures, repository mocking, and Store API test guidance.
+- Added [20-search-and-indexing.md](shopware-development/references/20-search-and-indexing.md) as the primary owner for Elasticsearch or OpenSearch extension points, mapping plus fetch symmetry, search-route usage, reindexing, and search fallback behavior.
+- Added [21-internationalization-and-snippets.md](shopware-development/references/21-internationalization-and-snippets.md) as the primary owner for storefront and admin snippets, translation associations, language-aware DAL behavior, fallback rules, and 6.7 base-snippet conventions.
+- Added an explicit routing table to [SKILL.md](shopware-development/SKILL.md) for payments, cart, storefront, admin, review, testing, search, and i18n work.
+
+### Changed
+
+- Made the skill example-driven across the owning references instead of keeping the pack prose-only. Implementation-bearing references now contain concrete bad or good patterns, while workflow and review references now ship literal output templates.
+- Strengthened [01-source-hierarchy.md](shopware-development/references/01-source-hierarchy.md) with ownership examples so new learnings route cleanly into one primary reference instead of duplicating across backend, cart, search, testing, or i18n files.
+- Strengthened [02-version-targeting.md](shopware-development/references/02-version-targeting.md) with a migration playbook and concrete scan or replacement examples for 6.6 versus 6.7 work.
+- Strengthened [03-implementation-workflow.md](shopware-development/references/03-implementation-workflow.md) with literal PR-description and QA-guide templates.
+- Strengthened [04-plugin-backend.md](shopware-development/references/04-plugin-backend.md) with an entity-extension decision matrix and concrete DAL batching, partial-loading, and custom-field merge examples.
+- Strengthened [05-storefront-and-themes.md](shopware-development/references/05-storefront-and-themes.md), [06-administration-and-apps.md](shopware-development/references/06-administration-and-apps.md), [07-payments.md](shopware-development/references/07-payments.md), [09-symfony-and-php.md](shopware-development/references/09-symfony-and-php.md), [11-quality-and-operations.md](shopware-development/references/11-quality-and-operations.md), [12-extension-patterns.md](shopware-development/references/12-extension-patterns.md), [13-context-and-commerce.md](shopware-development/references/13-context-and-commerce.md), [14-cli-and-dev-tooling.md](shopware-development/references/14-cli-and-dev-tooling.md), [15-subscriptions-and-recurring-payments.md](shopware-development/references/15-subscriptions-and-recurring-payments.md), [16-headless-and-composable-frontends.md](shopware-development/references/16-headless-and-composable-frontends.md), and [17-accessibility-and-template-best-practices.md](shopware-development/references/17-accessibility-and-template-best-practices.md) with concise Shopware-shaped examples or stronger routing and review support.
+- Strengthened [08-analysis-and-reviews.md](shopware-development/references/08-analysis-and-reviews.md) with literal findings templates while keeping findings-first review output intact.
+- Strengthened [10-official-docs-map.md](shopware-development/references/10-official-docs-map.md) with testing links, translation links, core-source anchors, and stale-link maintenance guidance.
+- Updated [README.md](README.md) and [openai.yaml](shopware-development/agents/openai.yaml) to reflect the broader example-driven scope and new reference files.
+
+### Validation
+
+- Validated markdown frontmatter across the skill pack.
+- Validated [openai.yaml](shopware-development/agents/openai.yaml).
+- Audited the main ownership boundaries between backend, cart, payments, review, accessibility, search, testing, and i18n references so the new examples expand the skill without creating contradictory owners.
+
 ## [v0.3.0] - 2026-03-12
 
 ### Added

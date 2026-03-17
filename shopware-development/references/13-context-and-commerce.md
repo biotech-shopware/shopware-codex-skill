@@ -28,6 +28,27 @@ Example:
 - Recalculate recurring-order totals, shipping, and payment context from the active or reconstructed sales-channel context instead of reusing stale original transaction assumptions.
 - Treat external tax integrations as hot-path risks and apply the same timeout and fallback rules used elsewhere in checkout.
 
+Example patterns:
+
+```php
+// Bad: storefront flow falls back to default context and loses real pricing scope
+$context = Context::createDefaultContext();
+$product = $this->productRepository->search(new Criteria([$productId]), $context)->first();
+```
+
+```php
+// Preferred: keep the sales-channel context authoritative and only extract DAL context where needed
+$product = $this->productRepository->search(
+    new Criteria([$productId]),
+    $salesChannelContext->getContext()
+)->first();
+```
+
+```text
+Bad: reuse the original subscription order total after the customer changes address, shipping method, or tax context.
+Good: rebuild or recalculate in the active sales-channel context before charging or persisting the renewal.
+```
+
 ## B2B and Organization-Sensitive Logic
 
 - When a project has company accounts, roles, approval flows, or budget logic, keep those boundaries explicit instead of overloading standard customer assumptions.
@@ -37,3 +58,4 @@ Example:
 
 - Load `04-plugin-backend.md` for DAL, Store API, and caching behavior.
 - Load `11-quality-and-operations.md` for shipping, tax, and external dependency resilience.
+- Load `18-cart-and-checkout-pipeline.md` when pricing, shipping, or promotion behavior is part of the cart lifecycle.

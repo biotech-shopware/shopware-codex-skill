@@ -73,7 +73,11 @@ shopware-skills/
         ├── 14-cli-and-dev-tooling.md
         ├── 15-subscriptions-and-recurring-payments.md
         ├── 16-headless-and-composable-frontends.md
-        └── 17-accessibility-and-template-best-practices.md
+        ├── 17-accessibility-and-template-best-practices.md
+        ├── 18-cart-and-checkout-pipeline.md
+        ├── 19-testing-patterns.md
+        ├── 20-search-and-indexing.md
+        └── 21-internationalization-and-snippets.md
 ```
 
 ### Root files
@@ -107,8 +111,12 @@ shopware-skills/
 - administration modules and app extensions
 - payment handlers, redirects, webhooks, vaulting, refunds, and payment reviews
 - subscriptions, renewals, saved-payment-method ownership, and recurring-commerce flows
+- cart, checkout, delivery, promotion, and line-item pipeline work
 - headless or composable frontend payment integrations and browser/backend contract reviews
 - Store API and Admin API extension work
+- Shopware-specific testing patterns, fixtures, and Store API test work
+- search, indexing, Elasticsearch/OpenSearch extension work
+- snippets, translation associations, and localization handling
 - DAL design, migrations, service architecture, and queue patterns
 - project-level Shopware implementation planning
 - code review, architecture analysis, and multi-plugin recurring audits
@@ -126,6 +134,11 @@ The skill encodes repeatable Shopware-specific constraints that generic coding g
 - recurring P0/P1 failure modes from real plugin reviews
 - browser trust-boundary failures in separate frontend payment packages
 - accessibility and template pitfalls seen in real storefront reviews
+- cart processor and collector ordering mistakes
+- generic PHPUnit patterns that do not fit Shopware's test surfaces
+- stale snippet, fallback-language, and translation-layer assumptions
+
+From `v0.4.0` onward, the skill is also example-driven. The reference files do not just state rules; they now include short bad/good patterns or literal output templates so the model has concrete anchors without loading a second parallel examples tree.
 
 ## Skill Architecture
 
@@ -386,6 +399,59 @@ Owns deeper storefront accessibility and compliance review guidance:
 
 Use this when accessibility, ADA, WCAG, screen-reader, keyboard, focus, form, modal, or storefront compliance work is in scope.
 
+### [18-cart-and-checkout-pipeline.md](shopware-development/references/18-cart-and-checkout-pipeline.md)
+
+Owns cart and checkout internals:
+
+- collector versus processor responsibilities
+- processor ordering and recalculation
+- line-item creation and payload discipline
+- cart validators
+- delivery, shipping, and promotion interactions
+- order conversion and recalculation boundaries
+- checkout hot-path red lines
+
+Use this for cart processors, checkout behavior, delivery calculations, promotions, or line-item modeling.
+
+### [19-testing-patterns.md](shopware-development/references/19-testing-patterns.md)
+
+Owns Shopware-shaped testing guidance:
+
+- `IntegrationTestBehaviour`
+- `SalesChannelApiTestBehaviour`
+- fixture and builder discipline
+- repository mocking with Shopware patterns
+- migration and wiring tests
+- Store API and checkout test surfaces
+
+Use this when the task includes tests, fixtures, or CI proof for Shopware behavior.
+
+### [20-search-and-indexing.md](shopware-development/references/20-search-and-indexing.md)
+
+Owns search and indexing behavior:
+
+- storefront search versus raw DAL misuse
+- Elasticsearch/OpenSearch extension points
+- mapping and fetch symmetry
+- query builder customization
+- reindexing and fallback behavior
+- search rollout and observability risks
+
+Use this for search-heavy features, indexing work, or search-performance reviews.
+
+### [21-internationalization-and-snippets.md](shopware-development/references/21-internationalization-and-snippets.md)
+
+Owns localization behavior:
+
+- storefront and admin snippets
+- translation associations
+- language-aware DAL behavior
+- fallback and inheritance rules
+- 6.7 base-snippet conventions
+- translation validation and packaging checks
+
+Use this when the task touches snippets, translations, locale-sensitive output, or 6.7.3+ snippet migration work.
+
 ## How The Skill Works With The Current Model
 
 This skill is meant to improve the model, not narrow it.
@@ -425,7 +491,7 @@ The protection against over-constraining the model is structural:
 - the trigger file is short
 - references are split by concern
 - Codex is instructed to load only relevant reference files as starting context
-- the skill uses guidance, not rigid templates
+- the skill uses guidance, inline examples, and literal output templates as anchors, not as a hard ceiling
 
 In practice, the skill acts like a Shopware senior engineer sitting next to the model and saying:
 
@@ -461,10 +527,14 @@ Use `shopware-development` by default for:
 - plugin fixes
 - feature development in a Shopware plugin
 - accessibility or storefront compliance reviews
+- cart and checkout pipeline work
 - payment integration work
 - subscription lifecycle and renewal work
 - saved-payment-method or recurring-payment ownership reviews
 - headless or composable frontend payment work
+- Shopware-specific testing and fixture work
+- search or indexing work
+- snippet, translation, or localization work
 - storefront Twig/JS/SCSS changes
 - admin module work
 - Store API/Admin API extensions
@@ -582,6 +652,30 @@ $shopware-development implement this feature in small safe chunks, preserve exte
 $shopware-development review and fix this payment integration with focus on validate/finalize flow, webhook authenticity, idempotency, refunds, and state sync.
 ```
 
+### Cart and checkout work
+
+```text
+$shopware-development analyze this cart or checkout change with focus on collector/processor boundaries, line item modeling, delivery and promotion interactions, and checkout hot-path safety.
+```
+
+### Testing work
+
+```text
+$shopware-development add or fix Shopware tests for this change using the right mix of IntegrationTestBehaviour, Store API tests, fixtures, and narrow validation.
+```
+
+### Search and indexing work
+
+```text
+$shopware-development review this search or Elasticsearch/OpenSearch change with focus on mapping plus fetch symmetry, fallback behavior, reindexing impact, and storefront search correctness.
+```
+
+### Translation and snippet work
+
+```text
+$shopware-development implement this snippet or translation change with attention to 6.7 base files, admin/storefront ownership, fallback behavior, and validation commands.
+```
+
 ### Recurring and subscription work
 
 ```text
@@ -645,6 +739,13 @@ If you ask for a PR or merge-request description and do not specify another form
 
 This repository keeps the canonical detailed release history in [CHANGELOG.md](CHANGELOG.md). The README keeps only the summary view, and annotated release tags should mirror the matching changelog entry.
 
+### `v0.4.0`
+
+- Added example-driven guidance inline across the owning references instead of creating a separate examples tree.
+- Added [18-cart-and-checkout-pipeline.md](shopware-development/references/18-cart-and-checkout-pipeline.md), [19-testing-patterns.md](shopware-development/references/19-testing-patterns.md), [20-search-and-indexing.md](shopware-development/references/20-search-and-indexing.md), and [21-internationalization-and-snippets.md](shopware-development/references/21-internationalization-and-snippets.md).
+- Added an explicit routing table in [SKILL.md](shopware-development/SKILL.md) for payments, cart, review, admin, testing, search, and i18n work.
+- Strengthened the thinner references with concrete Shopware-shaped examples so the skill stays clustered without becoming generic.
+
 ### `v0.3.0`
 
 - Added [LICENSE](LICENSE) and [CHANGELOG.md](CHANGELOG.md).
@@ -687,6 +788,7 @@ When updating this repo:
 - put detailed domain rules into the correct reference file
 - update [CHANGELOG.md](CHANGELOG.md) for every skill-affecting change before release
 - keep the annotated release tag body aligned with the matching changelog entry
+- keep new examples inline in the owning reference file instead of creating duplicate example files
 - do not duplicate rules across reference files unless the duplication prevents a real operational mistake
 - update [openai.yaml](shopware-development/agents/openai.yaml) when the skill description materially changes
 - prefer adding rules only when they are repeatable, high-signal, and specific to Shopware work

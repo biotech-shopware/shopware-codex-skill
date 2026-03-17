@@ -38,6 +38,22 @@ If any of those answers are unclear, keep exploring before recommending fixes.
 - If a subscription plugin persists a provider-specific choice, verify that the save step is atomic with the payment-method change or clearly recoverable after failure.
 - When a saved method is deleted or detached, make the failure path explicit for future renewals.
 
+Example patterns:
+
+```php
+// Bad: storefront mutation by raw subscription UUID
+$subscription = $this->subscriptionRepository->search(new Criteria([$subscriptionId]), $context)->first();
+$subscription->setPaymentMethodId($newPaymentMethodId);
+```
+
+```php
+// Preferred: customer- and channel-scoped lookup before mutation
+$criteria = new Criteria();
+$criteria->addFilter(new EqualsFilter('id', $subscriptionId));
+$criteria->addFilter(new EqualsFilter('customerId', $salesChannelContext->getCustomerId()));
+$criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannelId()));
+```
+
 ## Provider Truth and Event Authority
 
 - Client-reported payment success, transaction IDs, card IDs, or recurring references are hints only.

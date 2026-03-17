@@ -65,6 +65,36 @@ Example:
 - tokenized direct flow
   storefront JS sends only the provider token, while the backend attaches it to a server-created intent and verifies amount, currency, and merchant context server-side.
 
+Code shape example:
+
+```php
+// Bad: browser token and request amount become local payment truth
+public function pay(RequestDataBag $data, SalesChannelContext $context, AsyncPaymentTransactionStruct $transaction): RedirectResponse
+{
+    $this->transactionRepository->update([[
+        'id' => $transaction->getOrderTransaction()->getId(),
+        'stateId' => 'paid',
+        'customFields' => ['provider_token' => $data->get('token')],
+    ]], $context->getContext());
+
+    return new RedirectResponse($data->get('successUrl'));
+}
+```
+
+```php
+// Preferred: persist operation intent, verify later, and keep local state server-authoritative
+public function pay(RequestDataBag $data, SalesChannelContext $context, AsyncPaymentTransactionStruct $transaction): RedirectResponse
+{
+    $this->paymentOperationService->prepare(
+        $transaction->getOrderTransaction()->getId(),
+        $data->getAlnum('providerToken'),
+        $context
+    );
+
+    return new RedirectResponse($this->paymentOrchestrator->createRedirect($transaction, $context));
+}
+```
+
 ## Correctness Rules
 
 - Use `validate()` for prepared-payment invariants such as `orderTransactionId`, server-side prepared references, currency, amount, and merchant-account checks.
@@ -149,3 +179,9 @@ Example:
 - recurring charge or subscription payment-method change authority if present
 - concurrency between admin refunds and webhook deliveries
 - degraded-provider load behavior so timeouts and circuit breakers do not starve checkout workers
+
+Cross-reference example:
+
+```text
+If the payment issue is really caused by collector or processor ordering, move the cart behavior into 18-cart-and-checkout-pipeline.md and keep only the payment authority rule here.
+```

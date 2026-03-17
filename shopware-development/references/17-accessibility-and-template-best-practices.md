@@ -85,6 +85,26 @@ Twig and render cost:
 - Do not embed inline scripts or styles inside repeated product or CMS loops.
 - Prepare data once in a page loader, subscriber, resolver, or service.
 
+Example patterns:
+
+```twig
+{# Bad: repeated hard-coded ID and pseudo-control #}
+<a href="#" id="filter-toggle" aria-controls="filter-panel">
+    {{ "listing.filter"|trans }}
+</a>
+```
+
+```twig
+{# Preferred: instance-safe semantics #}
+<button
+    type="button"
+    id="filter-toggle-{{ category.id }}"
+    aria-controls="filter-panel-{{ category.id }}"
+    aria-expanded="false">
+    {{ "listing.filter"|trans }}
+</button>
+```
+
 ## Custom Storefront JS and Plugin Guidance
 
 - Scope selectors and event handling to the component root, ideally `this.el`.

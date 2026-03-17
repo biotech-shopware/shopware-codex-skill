@@ -27,6 +27,30 @@ Official docs:
 - Do not use positive `tabindex`.
 - Do not embed inline script or style blocks inside repeated product-card, slider, or CMS loops.
 
+Example patterns:
+
+```twig
+{# Bad: copied control markup plus pseudo-button navigation #}
+<a href="#" class="buy-widget__toggle" onclick="toggleDetails()">
+    {{ "my-plugin.details"|trans }}
+</a>
+```
+
+```twig
+{# Preferred: block-safe override with semantic control #}
+{% sw_extends '@Storefront/storefront/component/product/card/action.html.twig' %}
+
+{% block component_product_box_action_inner %}
+    <button
+        type="button"
+        class="btn btn-secondary"
+        aria-controls="product-details-{{ product.id }}"
+        aria-expanded="false">
+        {{ "my-plugin.details"|trans }}
+    </button>
+{% endblock %}
+```
+
 ## Storefront JS
 
 - Use the Shopware storefront plugin system and data attributes for progressive enhancement.
@@ -46,6 +70,17 @@ Official docs:
 - Keep third-party widgets route-scoped and consent-aware.
 - Throttle scroll handlers, constrain MutationObservers, and avoid polling loops that run across the whole storefront without a hard need.
 - Do not use body-wide MutationObservers as the default way to repair labels, alt text, or other accessibility issues after render.
+
+```js
+// Bad: global query and HTML sink in a repeated component
+document.querySelector('.coupon-status').innerHTML = response.message;
+```
+
+```js
+// Preferred: component-scoped update with safe text and status semantics
+this.el.querySelector('[data-coupon-status]').textContent = response.message;
+this.el.querySelector('[data-coupon-status]').setAttribute('role', 'status');
+```
 
 ## SCSS and Theme Work
 
@@ -99,8 +134,9 @@ Official docs:
 
 ## Cross-References
 
-- For cart or checkout behavior, also load `04-plugin-backend.md`.
+- For cart or checkout behavior, also load `18-cart-and-checkout-pipeline.md` and `04-plugin-backend.md` when backend ownership or page-loader work matters.
 - For payment UI, tokenization, or redirect/finalize flows, also load `07-payments.md`.
 - For headless or composable frontend packages, also load `16-headless-and-composable-frontends.md`.
 - For cookie consent, store readiness, or release quality checks, also load `11-quality-and-operations.md`.
 - For deeper storefront accessibility review or remediation planning, also load `17-accessibility-and-template-best-practices.md`.
+- For snippets, translation files, or localization behavior, also load `21-internationalization-and-snippets.md`.
