@@ -1,8 +1,6 @@
 # Search and Indexing
 
-Use this file when the task touches product search, storefront listings, Elasticsearch or OpenSearch customization, index mapping, indexers, or search-related performance.
-
-## Search Surface Choice
+## Search Rules
 
 - Prefer Shopware's search and listing routes when the task is storefront search or filtering behavior.
 - Use DAL reads for bounded backoffice or support tasks, not as a substitute for storefront search architecture.
@@ -65,10 +63,3 @@ public function mapping(array $mapping): array
 - Does the custom search logic preserve language, visibility, and sales-channel scope?
 - What happens when Elasticsearch or OpenSearch is disabled or stale?
 - Is any search change going to force reindexing, and is that captured in rollout guidance?
-
-## Cross-References
-
-- Load `04-plugin-backend.md` for DAL and route design.
-- Load `10-official-docs-map.md` for official docs and core-source anchors.
-- Load `11-quality-and-operations.md` for rollout, observability, and fallback discipline.
-- Load `13-context-and-commerce.md` when search behavior depends on pricing or sales-channel scope.

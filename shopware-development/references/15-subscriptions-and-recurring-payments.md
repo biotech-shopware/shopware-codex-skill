@@ -1,7 +1,5 @@
 # Subscriptions and Recurring Payments
 
-Use this file whenever the task involves subscriptions, renewals, saved payment methods, recurring token usage, or multiple payment plugins attached to the same customer flow.
-
 ## Core Review Boundaries
 
 Establish these boundaries before judging code quality:
@@ -87,10 +85,3 @@ Minimum questions to answer in a review:
 - Does recurring order creation reuse stale order totals or stale transaction amounts?
 - Can duplicate scheduler runs or duplicate webhooks create duplicate charges or skip a renewal cycle?
 - Are provider payloads, signatures, tokens, or customer identifiers logged or stored more broadly than necessary?
-
-## Cross-References
-
-- Load `07-payments.md` for PSP handler, webhook, and tokenization guidance.
-- Load `08-analysis-and-reviews.md` for severity ordering and multi-repo review output.
-- Load `11-quality-and-operations.md` for logging, task-batching, and resilience checks.
-- Load `13-context-and-commerce.md` for customer, sales-channel, and pricing scope rules.

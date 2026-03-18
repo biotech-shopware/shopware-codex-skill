@@ -1,7 +1,5 @@
 # Cart and Checkout Pipeline
 
-Use this file when the task touches cart collectors, processors, validators, line items, delivery calculation, promotion interactions, checkout recalculation, or anything that runs on the customer hot path.
-
 ## Core Pipeline Mental Model
 
 The stable Shopware core pattern is:
@@ -136,15 +134,3 @@ Minimum questions to answer in cart or checkout reviews:
 - Are cart validators cheap and deterministic?
 - Does any cart, confirm, or checkout page loader trigger writes, remote I/O, or heavy recalculation?
 - If payment is involved, where does payment authority rejoin the cart or order flow?
-
-## Official Anchors
-
-- cart concept: `https://developer.shopware.com/docs/concepts/commerce/checkout-concept/cart.html`
-- add cart collector/processor: `https://developer.shopware.com/docs/guides/plugins/plugins/checkout/cart/add-cart-processor-collector.html`
-
-## Cross-References
-
-- Load `04-plugin-backend.md` for DAL, Store API, migrations, and async boundaries.
-- Load `07-payments.md` when payment handlers or finalize flows intersect the checkout path.
-- Load `13-context-and-commerce.md` for pricing, tax, and sales-channel context rules.
-- Load `19-testing-patterns.md` for cart integration and Store API test guidance.

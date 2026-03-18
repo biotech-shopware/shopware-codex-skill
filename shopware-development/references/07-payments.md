@@ -26,12 +26,6 @@ For Shopware 6.7, start from the official payment guide:
 
 For 6.6, open the archived guide first and verify the exact handler surface before reusing 6.7 assumptions.
 
-Official docs:
-
-- 6.7 payment guide: `https://developer.shopware.com/docs/guides/plugins/plugins/checkout/payment/add-payment-plugin.html`
-- 6.6 payment guide: `https://developer.shopware.com/docs/v6.6/guides/plugins/plugins/checkout/payment/add-payment-plugin.html`
-- payment concept: `https://developer.shopware.com/docs/concepts/commerce/checkout-concept/payments.html`
-
 ## Recommended Architecture
 
 Split responsibilities:

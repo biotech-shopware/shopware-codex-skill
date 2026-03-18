@@ -53,9 +53,3 @@ Good: rebuild or recalculate in the active sales-channel context before charging
 
 - When a project has company accounts, roles, approval flows, or budget logic, keep those boundaries explicit instead of overloading standard customer assumptions.
 - Do not let a single customer-level shortcut bypass channel, role, or organization checks.
-
-## Cross-References
-
-- Load `04-plugin-backend.md` for DAL, Store API, and caching behavior.
-- Load `11-quality-and-operations.md` for shipping, tax, and external dependency resilience.
-- Load `18-cart-and-checkout-pipeline.md` when pricing, shipping, or promotion behavior is part of the cart lifecycle.

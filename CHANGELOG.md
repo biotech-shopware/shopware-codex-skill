@@ -6,6 +6,21 @@ All notable changes to this repository are documented here.
 
 - No unreleased changes.
 
+## [v0.4.2] - 2026-03-18
+
+### Changed
+
+- Tightened `shopware-development/SKILL.md` into routing, source discipline, execution rules, and output expectations only.
+- Removed provenance, repeated file-intro text, disclaimer text, and generic cross-reference tails from the skill references.
+- Centralized duplicated implementation-doc links into `shopware-development/references/10-official-docs-map.md`.
+- Trimmed low-value wording without changing the trigger name, file layout, topic ownership, or example coverage.
+
+### Validation
+
+- Grepped the skill pack for removed boilerplate patterns such as `Use this file`, `Official docs:`, and `## Cross-References`.
+- Revalidated markdown frontmatter and `shopware-development/agents/openai.yaml`.
+- Rechecked the cleaned repo copy against the installed global skill after sync.
+
 ## [v0.4.1] - 2026-03-17
 
 ### Changed

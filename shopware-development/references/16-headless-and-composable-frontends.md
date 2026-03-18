@@ -1,7 +1,5 @@
 # Headless and Composable Frontends
 
-Use this file whenever a Shopware backend plugin shares one checkout or payment flow with a separate frontend repo, composable frontend package, SDK wrapper, or browser-heavy payment integration.
-
 ## Core Contract Boundaries
 
 Establish these boundaries before recommending fixes:
@@ -56,11 +54,3 @@ Minimum questions to answer in a paired backend/frontend review:
 - Does the frontend eagerly fetch provider data during checkout render that could be deferred until payment selection?
 - Are payment SDK scripts, cart/config fetches, or provider-token requests duplicated across components?
 - Are browser logs or telemetry leaking tokens, context identifiers, vault identifiers, or payment responses?
-
-## Cross-References
-
-- Load `04-plugin-backend.md` for Store API, ownership, and server-authoritative route design.
-- Load `05-storefront-and-themes.md` for JS sinks, third-party script loading, and storefront performance.
-- Load `07-payments.md` for PSP verification, tokenization, webhooks, and payment-link rules.
-- Load `08-analysis-and-reviews.md` for cross-repo review structure.
-- Load `11-quality-and-operations.md` for browser logging, telemetry, and security failure modes.

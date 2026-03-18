@@ -1,7 +1,5 @@
 # Official Docs Map
 
-Use this file to jump to the exact official docs needed for the current task. Open only the links that match the active workstream.
-
 ## Versioned Shopware Docs
 
 - Shopware docs root: `https://developer.shopware.com/docs/`
@@ -30,6 +28,7 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - cache concept: `https://developer.shopware.com/docs/concepts/framework/cache.html`
 - HTTP cache: `https://developer.shopware.com/docs/concepts/framework/http_cache.html`
 - plugin caching guide: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/caching/`
+- hosting caches: `https://developer.shopware.com/docs/guides/hosting/performance/caches.html`
 - add data indexer: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-data-indexer.html`
 - message queue: `https://developer.shopware.com/docs/guides/hosting/infrastructure/message-queue.html`
 - add scheduled task: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html`
@@ -123,10 +122,3 @@ Use matching Shopware core when the official docs are thin or a behavior is vers
 - repository mocking ADR: `adr/2023-04-01-mocking-repositories.md`
 - Elasticsearch product definition: `src/Elasticsearch/Product/ElasticsearchProductDefinition.php`
 - OpenSearch admin search ADR: `adr/2026-01-28-apply-opensearch-in-admin-api.md`
-
-## Maintenance
-
-- Treat this file as a jump table, not a frozen archive.
-- Re-check official links during every release that changes scope, version targeting, or major references.
-- If a link is stale, update the path instead of silently deleting the topic.
-- When official docs are missing or too thin, add a matching core-source anchor rather than inventing unsupported behavior.

@@ -48,11 +48,6 @@ Use install/update lifecycle code only for plugin lifecycle concerns, not genera
 - Prefer decoration or events over replacing core behavior by inheritance.
 - Wrap external clients in services that centralize timeouts, retries, and logging policy.
 
-Open official docs when the task touches service wiring:
-
-- add custom service: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-custom-service.html`
-- adjust service: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/adjusting-service.html`
-
 ## DAL and Data Modeling
 
 - Use DAL first; fall back to DBAL only when necessary.
@@ -135,10 +130,6 @@ $payload = [
 - Add composite unique indexes where they enforce idempotency or natural uniqueness for operational tables.
 - Use parameter binding for manual SQL.
 
-Official docs:
-
-- migrations: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/database-migrations.html`
-
 ## Store API and Admin API
 
 - Keep routes thin and decoratable.
@@ -158,11 +149,6 @@ Official docs:
 - Prefer decorating services or inner routes over redefining existing public routes. Route duplication or controller copy-paste often drops ACL, validation, or behavior guarantees.
 - Do not call your own shop's Admin API or Store API over HTTP from backend code in the same project. Inject the underlying services or repositories directly.
 
-Official docs:
-
-- add Store API route: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/store-api/add-store-api-route.html`
-- add cart collector/processor: `https://developer.shopware.com/docs/guides/plugins/plugins/checkout/cart/add-cart-processor-collector.html`
-
 Keep detailed collector, processor, validator, delivery, and promotion pipeline rules in `18-cart-and-checkout-pipeline.md` instead of expanding this file with cart internals.
 
 ## Performance, Cache, and Async
@@ -179,16 +165,6 @@ Keep detailed collector, processor, validator, delivery, and promotion pipeline 
 - Do not perform DAL writes, entity updates, or expensive recalculations inside storefront read routes or generic render events just to decorate response data. Use runtime extensions, response extensions, or cacheable precomputation.
 - Avoid `order.written` or state-transition subscribers that write the same entity again or call external systems synchronously. That pattern creates recursion, duplicate processing, and checkout latency.
 - Normalize cache keys and set TTLs for external-quote or derived-data caches. Never cache entire serialized request payloads forever.
-
-Official docs:
-
-- cache concept: `https://developer.shopware.com/docs/concepts/framework/cache.html`
-- HTTP cache: `https://developer.shopware.com/docs/concepts/framework/http_cache.html`
-- plugin caching guide: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/caching/`
-- hosting caches: `https://developer.shopware.com/docs/guides/hosting/performance/caches.html`
-- data indexer: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-data-indexer.html`
-- message queue: `https://developer.shopware.com/docs/guides/hosting/infrastructure/message-queue.html`
-- scheduled task: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html`
 
 ## External Integrations
 

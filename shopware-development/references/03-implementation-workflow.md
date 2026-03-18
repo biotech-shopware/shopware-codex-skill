@@ -1,9 +1,5 @@
 # Implementation Workflow
 
-## Goal
-
-Deliver Shopware changes in small, reviewable chunks with explicit version handling and low regression risk.
-
 ## Step 1: Frame the Task
 
 - Identify the target version and active extension surface.

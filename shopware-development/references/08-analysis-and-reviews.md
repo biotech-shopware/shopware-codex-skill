@@ -1,7 +1,5 @@
 # Analysis and Reviews
 
-## Review Mode
-
 Use review mode when the user asks for:
 
 - a code review
@@ -10,8 +8,6 @@ Use review mode when the user asks for:
 - architecture analysis
 - regression risk assessment
 - upgrade-safety review
-
-## Source Rules
 
 - Pin the Shopware version from project files before judging best practices.
 - Use official Shopware docs, matching core behavior, and Symfony docs as the basis for recommendations.
@@ -152,17 +148,6 @@ Accessibility-first variant:
 - Keep sentences short and decisive.
 - Avoid filler and speculative noise.
 - If there are no findings, say so clearly and mention remaining verification gaps instead of padding the report.
-
-## Cross-References
-
-- Load `02-version-targeting.md` when version-specific behavior is relevant.
-- Load `07-payments.md` for payment reviews.
-- Load `15-subscriptions-and-recurring-payments.md` when subscriptions, renewals, saved methods, or multi-plugin recurring flows are in scope.
-- Load `16-headless-and-composable-frontends.md` when a separate frontend package, composable checkout, or browser-heavy payment contract is in scope.
-- Load `05-storefront-and-themes.md` for storefront-heavy reviews.
-- Load `17-accessibility-and-template-best-practices.md` when accessibility, ADA, WCAG, screen-reader, keyboard, form, focus, or storefront compliance work is in scope.
-- Load `11-quality-and-operations.md` for security, observability, store-readiness, and third-party resilience checks.
-- Load `13-context-and-commerce.md` when sales-channel, currency, tax, or permission scope matters.
 
 ## Triangulation Reviews
 

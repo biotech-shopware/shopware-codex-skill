@@ -1,7 +1,5 @@
 # Administration and Apps
 
-## Scope Choice
-
 Decide first whether the task belongs in:
 
 - a plugin administration module
@@ -36,15 +34,6 @@ fetch('/api/_action/my-plugin/rebuild-index', {
 Preferred: keep the privileged action in the admin or app backend, protect it with ACL or signed app requests, and expose only customer-safe storefront routes through Store API or another ownership-checked backend route.
 ```
 
-Official docs:
-
-- administration guide index: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/`
-- add custom module: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/module-component-management/add-custom-module.html`
-- add permissions: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/permissions-error-handling/add-acl-rules.html`
-- handling data: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/data-handling-processing/using-data-handling.html`
-- using services: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/services-utilities/using-services.html`
-- adding snippets: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/templates-styling/adding-snippets.html`
-
 ## 6.7 Migration Surfaces
 
 Treat these as explicit modernization tasks:
@@ -54,12 +43,6 @@ Treat these as explicit modernization tasks:
 - Vite build migration
 
 Use them only when the project already targets them or the user asked for the migration.
-
-Official docs:
-
-- Vue 3: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/system-updates/vue3.html`
-- Pinia: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/system-updates/pinia.html`
-- Vite: `https://developer.shopware.com/docs/guides/plugins/plugins/administration/system-updates/vite.html`
 
 ## 6.6 Compatibility Mode
 
@@ -80,11 +63,6 @@ Use app surfaces when the requirement fits the app model:
 - webhooks
 - app scripts
 - custom fields and extension surfaces declared through the manifest
-
-Official docs:
-
-- app administration: `https://developer.shopware.com/docs/guides/plugins/apps/administration/`
-- add custom module to an app: `https://developer.shopware.com/docs/guides/plugins/apps/administration/add-custom-module.html`
 
 ## Cloud and App-First Guidance
 

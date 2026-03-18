@@ -1,7 +1,5 @@
 # Accessibility and Template Best Practices
 
-## Source and Standards Baseline
-
 Use sources in this order when accessibility is in scope:
 
 1. Shopware official docs for the target version.
@@ -9,16 +7,6 @@ Use sources in this order when accessibility is in scope:
 3. W3C WCAG 2.2 and WAI-ARIA APG patterns.
 4. ADA.gov web guidance for U.S. business-accessibility framing.
 5. U.S. Access Board ICT and Section 508 material as secondary reference.
-
-This file is engineering guidance, not legal advice.
-
-Default external standards:
-
-- ADA web guidance: `https://www.ada.gov/resources/web-guidance/`
-- ADA 2024 web rule: `https://www.ada.gov/resources/2024-03-08-web-rule/`
-- WCAG 2.2: `https://www.w3.org/TR/WCAG22/`
-- WAI-ARIA APG index: `https://www.w3.org/WAI/ARIA/apg/`
-- Section 508 / ICT: `https://www.access-board.gov/ict/`
 
 ## U.S. Ecommerce Accessibility Baseline
 
@@ -165,10 +153,3 @@ Treat these as explicit red flags:
 - body-wide MutationObservers used to repair accessibility after render
 - `searchMedia()` or similar helpers inside Twig loops
 - global `document.querySelector(...)` usage in storefront plugins that should be component-scoped
-
-## Cross-References
-
-- Load `05-storefront-and-themes.md` for compact Twig, JS, and theme guidance.
-- Load `08-analysis-and-reviews.md` for severity ordering and review output structure.
-- Load `10-official-docs-map.md` when exact official sources are needed.
-- Load `11-quality-and-operations.md` for consent, third-party widget risk, and release-readiness checks.

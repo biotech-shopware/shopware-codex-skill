@@ -60,14 +60,6 @@ final class ProviderClient
 }
 ```
 
-Official docs:
-
-- Symfony best practices: `https://symfony.com/doc/current/best_practices.html`
-- service container: `https://symfony.com/doc/current/service_container.html`
-- HttpClient: `https://symfony.com/doc/current/http_client.html`
-- Messenger: `https://symfony.com/doc/current/messenger.html`
-- logging: `https://symfony.com/doc/current/logging.html`
-
 ## PHP Baseline
 
 Apply these rules unless the project has a stricter local standard:

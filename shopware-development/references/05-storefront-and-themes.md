@@ -7,10 +7,6 @@
 - Pass minimal context to templates.
 - Extend templates with blocks before copying files.
 
-Official docs:
-
-- customize templates: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/customize-templates.html`
-
 ## Twig Rules
 
 - Use `sw_extends` and block overrides for upgrade safety.
@@ -89,12 +85,6 @@ this.el.querySelector('[data-coupon-status]').setAttribute('role', 'status');
 - Keep overrides local to the feature.
 - Do not mix a large redesign with unrelated backend refactors.
 
-Official docs:
-
-- custom styling: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-styling.html`
-- SCSS variables: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-scss-variables.html`
-- theme inheritance: `https://developer.shopware.com/docs/guides/plugins/themes/add-theme-inheritance.html`
-
 ## Performance and Cache
 
 - Treat storefront performance as a cache and payload problem first.
@@ -120,23 +110,3 @@ Official docs:
 - If the change adds tracking, embeds, or third-party storefront scripts, verify consent and store-readiness impact explicitly.
 - Do not set global noindex or similar SEO-breaking directives from a theme override without scoping and intent.
 - For deeper storefront accessibility requirements, U.S. ecommerce baseline guidance, and WCAG-oriented review output, also load `17-accessibility-and-template-best-practices.md`.
-
-Official docs:
-
-- SEO guides: `https://developer.shopware.com/docs/guides/plugins/plugins/content/seo/`
-- add custom SEO URL: `https://developer.shopware.com/docs/guides/plugins/plugins/content/seo/add-custom-seo-url.html`
-- custom fields in storefront: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/using-custom-fields-storefront.html`
-- add custom JavaScript: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-javascript.html`
-- using a modal window: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/using-a-modal-window.html`
-- add cookie to manager: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-cookie-to-manager.html`
-- reacting to cookie consent changes: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/reacting-to-cookie-consent-changes.html`
-- working with media and thumbnails: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/use-media-thumbnails.html`
-
-## Cross-References
-
-- For cart or checkout behavior, also load `18-cart-and-checkout-pipeline.md` and `04-plugin-backend.md` when backend ownership or page-loader work matters.
-- For payment UI, tokenization, or redirect/finalize flows, also load `07-payments.md`.
-- For headless or composable frontend packages, also load `16-headless-and-composable-frontends.md`.
-- For cookie consent, store readiness, or release quality checks, also load `11-quality-and-operations.md`.
-- For deeper storefront accessibility review or remediation planning, also load `17-accessibility-and-template-best-practices.md`.
-- For snippets, translation files, or localization behavior, also load `21-internationalization-and-snippets.md`.

@@ -14,10 +14,6 @@
 - Do not log tokens, context tokens, provider responses, or payment payloads to the browser console or client-side telemetry by default.
 - Do not treat `localStorage`, `sessionStorage`, or other browser-persisted values as authoritative payment, vault, or ownership state.
 
-Official docs:
-
-- security reference: `https://developer.shopware.com/docs/resources/references/security.html`
-
 ## External API Resilience
 
 - Timeouts are mandatory.
@@ -58,11 +54,6 @@ if ($quote !== null) {
 - If the domain stores order snapshots, cart snapshots, or provider payloads, keep only the minimum fields needed for support and reconciliation.
 - Review recurring-payment and webhook logs specifically for leaked provider tokens, card identifiers, customer identifiers, signatures, and raw payload bodies.
 
-Official docs:
-
-- Shopware logging: `https://developer.shopware.com/docs/guides/hosting/configurations/observability/logging.html`
-- Symfony logging: `https://symfony.com/doc/current/logging.html`
-
 ## Testing and CI
 
 - Unit-test core services.
@@ -90,13 +81,6 @@ Good: after changing services.xml, a handler, and a scheduled task, run targeted
 - Register storefront cookies with the cookie consent manager when the feature sets them.
 - For third-party storefront widgets or embeds, verify consent impact, keyboard/focus/status behavior, and ask for a VPAT or vendor accessibility statement when the feature is accessibility-sensitive. See `17-accessibility-and-template-best-practices.md` for the storefront audit baseline.
 - Use store quality guidelines and store review errors as release gates, not as cleanup after the implementation is done.
-
-Official docs:
-
-- quality guidelines: `https://developer.shopware.com/docs/resources/guidelines/testing/store/quality-guidelines-plugins/`
-- store review errors: `https://developer.shopware.com/docs/guides/development/monetization/store-review-errors.html`
-- Shopware CLI: `https://developer.shopware.com/docs/products/cli/`
-- Shopware CLI validation: `https://developer.shopware.com/docs/products/cli/validation.html`
 
 ## Common Failure Modes
 

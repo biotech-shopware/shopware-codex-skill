@@ -1,8 +1,6 @@
 # Internationalization and Snippets
 
-Use this file when the task touches storefront snippets, admin snippets, translation associations, language-aware DAL behavior, or Shopware 6.7 snippet-layer changes.
-
-## Ownership Rules
+## Core Rules
 
 - Keep storefront snippets, admin snippets, and entity translations explicit. Do not mix them into one vague "translations" bucket.
 - Use snippets for UI text and translation associations for real entity content.
@@ -39,10 +37,3 @@ Good: use proper translation associations and read them in the correct language-
 - For 6.7.3+ translation work, run `translation:lint-filenames` and `snippet:validate` where available.
 - Check storefront and admin snippet resolution separately when both surfaces changed.
 - If the plugin supports 6.6 and 6.7, verify the filename strategy before bulk-renaming snippet files.
-
-## Cross-References
-
-- Load `02-version-targeting.md` for 6.6 versus 6.7.3+ translation behavior.
-- Load `05-storefront-and-themes.md` for storefront copy and semantic text placement.
-- Load `06-administration-and-apps.md` for admin snippet registration and build-surface concerns.
-- Load `11-quality-and-operations.md` for CI and packaging validation.

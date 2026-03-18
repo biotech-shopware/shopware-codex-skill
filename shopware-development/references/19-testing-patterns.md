@@ -1,8 +1,6 @@
 # Testing Patterns
 
-Use this file when the task includes PHPUnit, integration tests, Store API tests, fixtures, repository mocks, migration tests, or Shopware-specific test bootstrapping.
-
-## Test Surface Choice
+## Test Scope
 
 Pick the narrowest test that still proves the behavior:
 
@@ -85,9 +83,3 @@ $repository = new StaticEntityRepository([
 
 - Keep admin E2E coverage targeted. Use it when build/runtime behavior matters more than isolated service logic.
 - For storefront-heavy work, use smoke checks and targeted browser verification where performance or accessibility risk is real, but keep the primary ownership of browser-accessibility rules in `17-accessibility-and-template-best-practices.md`.
-
-## Cross-References
-
-- Load `18-cart-and-checkout-pipeline.md` for cart or checkout integration tests.
-- Load `07-payments.md` for payment idempotency and webhook test coverage.
-- Load `11-quality-and-operations.md` for CI and release-gate expectations.
