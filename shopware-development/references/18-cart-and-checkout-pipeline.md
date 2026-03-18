@@ -111,6 +111,28 @@ $lineItem = $this->lineItemFactoryRegistry->create([
 - Do not branch shipping or promotion logic on translated labels or storefront-only presentation state.
 - Keep shipping-method technical names stable across config and migration changes.
 
+Example patterns:
+
+```php
+// Bad: remote shipping lookup inside a processor on every recalculation
+public function process(CartDataCollection $data, Cart $original, Cart $toCalculate, SalesChannelContext $context, CartBehavior $behavior): void
+{
+    $quote = $this->carrierClient->fetchQuote($original);
+    $this->applyShippingQuote($toCalculate, $quote);
+}
+```
+
+```php
+// Preferred: resolve a bounded local or cached quote, then apply it deterministically
+public function process(CartDataCollection $data, Cart $original, Cart $toCalculate, SalesChannelContext $context, CartBehavior $behavior): void
+{
+    $quote = $data->get('my-plugin.shipping-quote');
+    if ($quote !== null) {
+        $this->applyShippingQuote($toCalculate, $quote);
+    }
+}
+```
+
 ## Order Conversion and Recalculation
 
 - Do not assume a cart snapshot is authoritative forever. Recalculate from the current sales-channel context when payment, shipping, currency, or rules may have changed.
@@ -123,6 +145,23 @@ $lineItem = $this->lineItemFactoryRegistry->create([
 - No repository `search()` inside loops over line items.
 - No broad association trees or cart snapshot hydration just to render one badge, label, or fee.
 - No writes or recalculations hidden in read routes that only load confirm, cart, or offcanvas pages.
+- No queue handoff for correctness-critical cart calculations that must finish before the customer sees the total.
+
+## Async Handoff Boundaries
+
+- Queue post-order side effects such as ERP sync, CRM sync, reporting, or delayed notification work after the order state is safely persisted.
+- Keep cart totals, shipping choices, tax decisions, and payment availability synchronous only when they are part of the current checkout truth.
+- If a third-party dependency cannot answer within a tight timeout on the checkout path, prefer cached data, a fallback path, or a post-order reconciliation model instead of blocking recalculation.
+
+Example patterns:
+
+```php
+// Preferred: queue post-order side effects instead of blocking checkout
+public function onCheckoutCompleted(CheckoutOrderPlacedEvent $event): void
+{
+    $this->messageBus->dispatch(new ExportOrderMessage($event->getOrderId()));
+}
+```
 
 ## Review Prompts
 

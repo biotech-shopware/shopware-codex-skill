@@ -6,6 +6,25 @@ All notable changes to this repository are documented here.
 
 - No unreleased changes.
 
+## [v0.5.0] - 2026-03-18
+
+### Changed
+
+- Expanded `shopware-development/SKILL.md` routing to cover HTTP cache, Varnish, reverse proxy, Messenger, RabbitMQ, worker, async, and indexer tasks explicitly.
+- Added concrete 6.7 cache and reverse-proxy guidance to `shopware-development/references/04-plugin-backend.md`, `05-storefront-and-themes.md`, and `11-quality-and-operations.md`, including `_httpCache`, `sw-cache-hash`, `sw-invalidation-states`, and cache-safe personalization patterns.
+- Added concrete Messenger and RabbitMQ guidance to `shopware-development/references/04-plugin-backend.md`, `11-quality-and-operations.md`, and `14-cli-and-dev-tooling.md`, including CLI-first workers, failure transport, delayed dispatch, and transport separation.
+- Expanded `shopware-development/references/20-search-and-indexing.md` with the `EntityIndexer` lifecycle, `IteratorFactory`, `EntityIndexingMessage`, and bounded reindex guidance.
+- Expanded `shopware-development/references/18-cart-and-checkout-pipeline.md` with checkout hot-path async boundaries and post-order queue handoff patterns.
+- Expanded `shopware-development/references/05-storefront-and-themes.md` and `17-accessibility-and-template-best-practices.md` with more Shopware-shaped examples for cache-safe Twig, consent-aware widgets, modal handling, live status, and repeated-component accessibility.
+- Expanded `shopware-development/references/10-official-docs-map.md` with exact Shopware cache, storefront, message queue, and indexer docs plus additional core-source anchors.
+- Updated `README.md` and `shopware-development/agents/openai.yaml` to reflect the new cache, queue, indexing, and storefront hardening coverage.
+
+### Validation
+
+- Revalidated markdown frontmatter and `shopware-development/agents/openai.yaml`.
+- Rechecked the main ownership boundaries for cache, queue, cart, indexing, and accessibility guidance.
+- Rechecked repo and global installed skill alignment after sync.
+
 ## [v0.4.2] - 2026-03-18
 
 ### Changed

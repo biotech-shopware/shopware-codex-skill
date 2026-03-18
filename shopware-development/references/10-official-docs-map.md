@@ -29,8 +29,13 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - HTTP cache: `https://developer.shopware.com/docs/concepts/framework/http_cache.html`
 - plugin caching guide: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/caching/`
 - hosting caches: `https://developer.shopware.com/docs/guides/hosting/performance/caches.html`
+- add caching to custom controller: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-caching-to-custom-controller.html`
+- add dynamic content via AJAX calls: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-dynamic-content-via-ajax-calls.html`
 - add data indexer: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-data-indexer.html`
 - message queue: `https://developer.shopware.com/docs/guides/hosting/infrastructure/message-queue.html`
+- add message to queue: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/message-queue/add-message-to-queue.html`
+- add message handler: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/message-queue/add-message-handler.html`
+- add middleware: `https://developer.shopware.com/docs/guides/plugins/plugins/framework/message-queue/add-middleware.html`
 - add scheduled task: `https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html`
 
 ## Storefront and Themes
@@ -41,6 +46,7 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 - using a modal window: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/using-a-modal-window.html`
 - add cookie to manager: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-cookie-to-manager.html`
 - reacting to cookie consent changes: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/reacting-to-cookie-consent-changes.html`
+- reacting to javascript events: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/reacting-to-javascript-events.html`
 - working with media and thumbnails: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/use-media-thumbnails.html`
 - add SCSS variables: `https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-scss-variables.html`
 - theme inheritance: `https://developer.shopware.com/docs/guides/plugins/themes/add-theme-inheritance.html`
@@ -50,6 +56,8 @@ When a 6.6 page is needed, start with the same path under `/docs/v6.6/` and conf
 
 ## Accessibility and U.S. Standards
 
+- storefront accessibility: `https://developer.shopware.com/docs/guides/development/accessibility/storefront-accessibility.html`
+- accessibility checklist: `https://developer.shopware.com/docs/guides/development/accessibility/accessibility-checklist.html`
 - ADA web guidance: `https://www.ada.gov/resources/web-guidance/`
 - ADA 2024 web rule: `https://www.ada.gov/resources/2024-03-08-web-rule/`
 - WCAG 2.2: `https://www.w3.org/TR/WCAG22/`
@@ -118,7 +126,12 @@ Use matching Shopware core when the official docs are thin or a behavior is vers
 - cart processing order: `src/Core/Checkout/Cart/Processor.php`
 - cart collector interface: `src/Core/Checkout/Cart/CartDataCollectorInterface.php`
 - cart processor interface: `src/Core/Checkout/Cart/CartProcessorInterface.php`
+- cacheable storefront controller example: `src/Storefront/Controller/ProductController.php`
 - Shopware integration test traits: `src/Core/Framework/Test/TestCaseBase/`
 - repository mocking ADR: `adr/2023-04-01-mocking-repositories.md`
+- entity indexer base class: `src/Core/Framework/DataAbstractionLayer/Indexing/EntityIndexer.php`
+- iterator factory: `src/Core/Framework/DataAbstractionLayer/Dbal/Common/IteratorFactory.php`
+- storefront plugin manager: `src/Storefront/Resources/app/storefront/src/plugin-system/plugin.manager.js`
+- cookie configuration plugin: `src/Storefront/Resources/app/storefront/src/plugin/cookie/cookie-configuration.plugin.js`
 - Elasticsearch product definition: `src/Elasticsearch/Product/ElasticsearchProductDefinition.php`
 - OpenSearch admin search ADR: `adr/2026-01-28-apply-opensearch-in-admin-api.md`

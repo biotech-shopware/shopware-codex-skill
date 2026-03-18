@@ -31,6 +31,34 @@ final class SyncCommand extends Command
 }
 ```
 
+## Workers and Transports
+
+- On production, prefer CLI workers over the browser-driven admin worker.
+- If CLI workers are configured, disable the admin worker explicitly in `config/packages/shopware.yaml`.
+- Consume the transports you actually configured. Keep checkout-relevant async work separate from low-priority transport consumption.
+- Use `shopware.messenger.routing_overwrite` when a specific Shopware message should be forced onto `low_priority` or another transport without changing the message class.
+- Use process supervision such as `systemd` or `supervisor` for long-running workers instead of relying on manual shells.
+- Include failed-message inspection and retry commands in operator guidance when the project depends on Messenger.
+
+Example:
+
+```yaml
+# config/packages/shopware.yaml
+shopware:
+  admin_worker:
+    enable_admin_worker: false
+  messenger:
+    routing_overwrite:
+      'Your\\Custom\\Message\\RebuildPartnerSnapshotMessage': low_priority
+```
+
+```text
+Preferred production worker commands:
+- bin/console messenger:consume async low_priority --time-limit=60 --memory-limit=512M
+- bin/console messenger:failed:show --transport=failed
+- bin/console messenger:failed:retry --transport=failed --force
+```
+
 ## Static Analysis and Quality Gates
 
 - Use the repo's existing quality toolchain first.

@@ -54,6 +54,36 @@ if ($quote !== null) {
 - If the domain stores order snapshots, cart snapshots, or provider payloads, keep only the minimum fields needed for support and reconciliation.
 - Review recurring-payment and webhook logs specifically for leaked provider tokens, card identifiers, customer identifiers, signatures, and raw payload bodies.
 
+## Cache, Queue, and Index Operations
+
+- Treat cache variation, queue backlog, and indexer pressure as first-class rollout risks for Shopware 6.7 plugin changes.
+- For cache-sensitive releases, verify anonymous/default, `cart-filled`, and `logged-in` state behavior explicitly because Shopware's HTTP cache and reverse proxies key off `sw-cache-hash` and invalidation states.
+- Do not add cookies, cache-relevant headers, or session writes casually on storefront pages that should stay Varnish-safe.
+- For production queues, prefer explicit transports for normal async work, low-priority work, and failed messages. Doctrine transport is acceptable for development; RabbitMQ or another dedicated transport is the expected production direction when load justifies it.
+- A queue failure path is part of the design. Configure `failure_transport`, retries, and operator commands before rollout, not after the first stuck batch.
+- Watch index rebuild cost after mapping or indexer changes: reindex duration, queue growth, DB load, and search fallback behavior.
+
+Example patterns:
+
+```yaml
+# Preferred: explicit production-oriented transport split
+framework:
+  messenger:
+    failure_transport: failed
+    transports:
+      async: '%env(MESSENGER_TRANSPORT_DSN)%'
+      low_priority: '%env(MESSENGER_TRANSPORT_LOW_PRIORITY_DSN)%'
+      failed: '%env(MESSENGER_TRANSPORT_FAILURE_DSN)%'
+```
+
+```text
+Good cache rollout check:
+- warm the changed page anonymously
+- verify no new plugin cookie is set on the cacheable response
+- verify cart-filled or logged-in state changes only the intended variant
+- verify invalidation after a relevant entity update
+```
+
 ## Testing and CI
 
 - Unit-test core services.
@@ -67,6 +97,7 @@ if ($quote !== null) {
 - Validate and package distributable extensions with Shopware CLI when the project uses it.
 - For 6.7.3+ translation work, add `translation:lint-filenames` and `snippet:validate` to CI when possible.
 - Run at least one container-compile or boot-path check when service wiring, decorators, handlers, or scheduled tasks changed.
+- For cache, queue, or indexing work, add one targeted operational check: cache-hit behavior, worker consume path, failed-message command, or `dal:refresh:index` on a safe environment.
 
 Concrete CI example:
 
@@ -101,12 +132,16 @@ Treat these as explicit regression checks:
 - internal plugins calling the shop's own HTTP API instead of shared services
 - writes or recalculations triggered from storefront render events or read routes
 - route duplication that drops core ACL or validation
+- custom cookies or session writes added to cacheable storefront routes
+- cacheable routes rendering customer-specific markup instead of isolating the fragment
 - scheduled tasks with tiny intervals, unbounded scans, or duplicate handler registration
 - scheduled tasks, reminders, or renewal workers that branch on translated state names instead of technical names
 - invalid DAL association usage such as treating `customFields` like a normal association
 - heavy blob hydration or full snapshot loading on large recurring batches without a clear need
 - cache entries with unbounded growth because keys are serialized payloads and TTL is missing
 - mutable operational flags stored in JSON payloads or custom fields and later queried at scale
+- missing failure transport, retry strategy, or low-priority separation on production message queues
+- indexer changes shipped without a bounded reindex plan or fallback check
 - deep template copying instead of block extension
 - copying core-only metadata into plugin code
 - silent API contract changes without versioning or compatibility planning

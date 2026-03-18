@@ -151,6 +151,47 @@ $payload = [
 
 Keep detailed collector, processor, validator, delivery, and promotion pipeline rules in `18-cart-and-checkout-pipeline.md` instead of expanding this file with cart internals.
 
+## HTTP Cache and Reverse Proxy Safety
+
+- Mark storefront routes cacheable only when they are `GET`-only, read-only, and state-safe.
+- For custom storefront controllers, use `defaults: ['_httpCache' => true]` and load data through page loaders or Store API routes so core cache tags remain authoritative.
+- `sw-cache-hash` already captures cache-relevant state such as login, cart, currency, tax, and matched rules. Do not create extra variation with custom cookies or ad hoc headers unless the response truly differs.
+- `sw-invalidation-states` can intentionally skip cache for states such as `logged-in` and `cart-filled`. Prefer Shopware's state model over plugin-specific cache-busting.
+- Never touch the session, set custom cookies, or render customer-specific markup from an otherwise cacheable route just to personalize a small fragment. Split that fragment into AJAX, ESI, or a dedicated non-cacheable endpoint.
+- Cacheable controller routes inherit invalidation from the Store API tags used to build the page. Avoid parallel invalidation logic unless the route truly loads plugin-owned data outside the normal Store API surfaces.
+
+Example patterns:
+
+```php
+// Bad: cacheable route mutates session state and renders personalized data
+#[Route(path: '/promo', name: 'frontend.my-plugin.promo', methods: ['GET'], defaults: ['_httpCache' => true])]
+public function promo(Request $request, SalesChannelContext $context): Response
+{
+    $request->getSession()->set('my_plugin_seen', true);
+
+    return $this->renderStorefront('@MyPlugin/storefront/page/promo.html.twig', [
+        'customerName' => $context->getCustomer()?->getFirstName(),
+    ]);
+}
+```
+
+```php
+// Preferred: keep the page cacheable and move personalization behind a separate endpoint
+#[Route(path: '/promo', name: 'frontend.my-plugin.promo', methods: ['GET'], defaults: ['_httpCache' => true])]
+public function promo(): Response
+{
+    return $this->renderStorefront('@MyPlugin/storefront/page/promo.html.twig');
+}
+
+#[Route(path: '/widgets/promo/customer-badge', name: 'frontend.my-plugin.promo.customer-badge', methods: ['GET'])]
+public function customerBadge(SalesChannelContext $context): JsonResponse
+{
+    return new JsonResponse([
+        'firstName' => $context->getCustomer()?->getFirstName(),
+    ]);
+}
+```
+
 ## Performance, Cache, and Async
 
 - Treat cart, checkout, login, account, and high-volume queries as hot paths.
@@ -165,6 +206,61 @@ Keep detailed collector, processor, validator, delivery, and promotion pipeline 
 - Do not perform DAL writes, entity updates, or expensive recalculations inside storefront read routes or generic render events just to decorate response data. Use runtime extensions, response extensions, or cacheable precomputation.
 - Avoid `order.written` or state-transition subscribers that write the same entity again or call external systems synchronously. That pattern creates recursion, duplicate processing, and checkout latency.
 - Normalize cache keys and set TTLs for external-quote or derived-data caches. Never cache entire serialized request payloads forever.
+
+## Messenger and Handler Patterns
+
+- Use explicit message classes plus idempotent handlers for async work. Persist dedupe or state-transition guards before dispatch when duplicates would hurt.
+- Prefer separate transports for checkout-sensitive async work and low-priority bulk work.
+- On Shopware, move non-urgent work to `low_priority` via `LowPriorityMessageInterface` or `shopware.messenger.routing_overwrite` instead of letting it compete with checkout-adjacent async work.
+- Delay work with `DelayStamp` only when eventual consistency is acceptable and the retry story is clear.
+- Keep handler side effects bounded. Re-read fresh state inside the handler instead of serializing whole entities into the message.
+
+Example patterns:
+
+```php
+// Preferred: thin request path, async handoff with an explicit delay
+$this->messageBus->dispatch(
+    new SyncPartnerOrderMessage($orderId),
+    [new DelayStamp(5000)]
+);
+```
+
+```php
+// Preferred: mark clearly non-urgent work as low priority
+final class RebuildPartnerSnapshotMessage implements LowPriorityMessageInterface
+{
+    public function __construct(private readonly string $customerId)
+    {
+    }
+}
+```
+
+```php
+// Preferred: transport-specific, idempotent handler
+#[AsMessageHandler(fromTransport: 'low_priority')]
+final class SyncPartnerOrderHandler
+{
+    public function __construct(
+        private readonly SyncLogService $syncLogService,
+        private readonly PartnerSyncService $partnerSyncService
+    ) {
+    }
+
+    public function __invoke(SyncPartnerOrderMessage $message): void
+    {
+        if ($this->syncLogService->alreadyProcessed($message->getOrderId())) {
+            return;
+        }
+
+        $this->partnerSyncService->syncOrder($message->getOrderId());
+    }
+}
+```
+
+```php
+// Bad: serializing mutable entities or large payloads into the message
+$this->messageBus->dispatch(new SyncPartnerOrderMessage($orderEntity, $request->request->all()));
+```
 
 ## External Integrations
 

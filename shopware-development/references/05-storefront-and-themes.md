@@ -22,6 +22,7 @@
 - Do not use `href="#"` or similar pseudo-controls for button behavior.
 - Do not use positive `tabindex`.
 - Do not embed inline script or style blocks inside repeated product-card, slider, or CMS loops.
+- Do not render customer-specific fragments or set plugin cookies from otherwise cacheable template paths just to personalize one label or banner.
 
 Example patterns:
 
@@ -47,6 +48,30 @@ Example patterns:
 {% endblock %}
 ```
 
+```twig
+{# Bad: repeated IDs and expensive helper work in a listing loop #}
+{% for product in searchResult %}
+    <button id="details-toggle" aria-controls="details-panel">
+        {{ "my-plugin.details"|trans }}
+    </button>
+
+    {% set media = searchMedia([product.coverId], context.context) %}
+{% endfor %}
+```
+
+```twig
+{# Preferred: instance-safe IDs and preloaded data prepared upstream #}
+{% for product in searchResult %}
+    <button
+        type="button"
+        id="details-toggle-{{ product.id }}"
+        aria-controls="details-panel-{{ product.id }}"
+        aria-expanded="false">
+        {{ "my-plugin.details"|trans }}
+    </button>
+{% endfor %}
+```
+
 ## Storefront JS
 
 - Use the Shopware storefront plugin system and data attributes for progressive enhancement.
@@ -66,6 +91,7 @@ Example patterns:
 - Keep third-party widgets route-scoped and consent-aware.
 - Throttle scroll handlers, constrain MutationObservers, and avoid polling loops that run across the whole storefront without a hard need.
 - Do not use body-wide MutationObservers as the default way to repair labels, alt text, or other accessibility issues after render.
+- Prefer Shopware's plugin registration and modal utilities over one-off global event wiring or bespoke modal shells.
 
 ```js
 // Bad: global query and HTML sink in a repeated component
@@ -76,6 +102,38 @@ document.querySelector('.coupon-status').innerHTML = response.message;
 // Preferred: component-scoped update with safe text and status semantics
 this.el.querySelector('[data-coupon-status]').textContent = response.message;
 this.el.querySelector('[data-coupon-status]').setAttribute('role', 'status');
+```
+
+```js
+// Preferred: consent-aware widget lifecycle
+import Plugin from 'src/plugin-system/plugin.class';
+import CookieStorage from 'src/helper/storage/cookie-storage.helper';
+import { COOKIE_CONFIGURATION_UPDATE } from 'src/plugin/cookie/cookie-configuration.plugin';
+
+export default class AnalyticsWidgetPlugin extends Plugin {
+    init() {
+        this.cookieStorage = new CookieStorage();
+        this.toggleWidget();
+
+        document.$emitter.subscribe(COOKIE_CONFIGURATION_UPDATE, () => {
+            this.toggleWidget();
+        });
+    }
+
+    toggleWidget() {
+        this.el.hidden = !this.cookieStorage.getItem('my-plugin-analytics');
+    }
+}
+```
+
+```twig
+{# Preferred: use Shopware's pseudo modal shell for route-scoped modal content #}
+<button
+    type="button"
+    data-ajax-modal="true"
+    data-url="{{ path('frontend.my-plugin.modal') }}">
+    {{ "my-plugin.openModal"|trans }}
+</button>
 ```
 
 ## SCSS and Theme Work
@@ -94,11 +152,13 @@ this.el.querySelector('[data-coupon-status]').setAttribute('role', 'status');
 - Protect CLS by avoiding late banners, async style jumps, and unstable placeholders.
 - Protect INP by keeping interaction handlers and storefront JS bundles small.
 - If navigation, catalog visibility, or shipping/payment presentation varies by customer segment, rule, or sales role, enforce that variation server-side and ensure the cache key varies accordingly. Hiding it only in Twig is not a security boundary.
+- Preserve cacheability of shared routes. If the page stays anonymous and cacheable, move customer-specific or high-churn fragments behind AJAX or purpose-built non-cacheable endpoints instead of forcing a whole-page miss.
 
 ## 6.7 Storefront Structure
 
 - Review header and footer overrides carefully on 6.7 because shared fragment rendering changed.
 - Re-check cache and template-target implications before copying older 6.6 storefront assumptions into 6.7 projects.
+- Keep theme overrides block-scoped on 6.7 so shared fragment and cache-tag behavior stays aligned with upstream template changes.
 
 ## SEO and Accessibility
 

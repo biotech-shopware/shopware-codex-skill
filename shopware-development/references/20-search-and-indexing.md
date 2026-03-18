@@ -5,6 +5,7 @@
 - Prefer Shopware's search and listing routes when the task is storefront search or filtering behavior.
 - Use DAL reads for bounded backoffice or support tasks, not as a substitute for storefront search architecture.
 - Treat Elasticsearch or OpenSearch extension points as mapping plus fetch plus query responsibilities together. Do not modify only one side.
+- For existing entities, prefer subscribing to existing write events when that solves the requirement. Add a custom indexer only when the data really needs indexed batch rebuild behavior.
 
 Example patterns:
 
@@ -43,6 +44,69 @@ public function mapping(array $mapping): array
 }
 ```
 
+## Entity Indexer Lifecycle
+
+- Register custom indexers with the `shopware.entity_indexer` tag.
+- `iterate()` owns full rebuild chunking. Keep it bounded with `IteratorFactory` so `bin/console dal:refresh:index` can process large data sets safely.
+- `update()` should emit `EntityIndexingMessage` only for the changed IDs that actually need recomputation.
+- `handle()` runs on the worker path. Re-read current state there instead of trusting stale serialized entities.
+- If an indexer write would re-trigger indexing, use direct DBAL writes inside `handle()` or add the `EntityIndexerRegistry::DISABLE_INDEXING` state deliberately before writing through DAL.
+- If an indexer change implies a full rebuild, name that in rollout guidance and QA notes.
+
+Example patterns:
+
+```php
+final class ExampleIndexer extends EntityIndexer
+{
+    public function __construct(
+        private readonly IteratorFactory $iteratorFactory,
+        private readonly EntityRepository $repository
+    ) {
+    }
+
+    public function getName(): string
+    {
+        return 'my_plugin.example.indexer';
+    }
+
+    public function iterate($offset): ?EntityIndexingMessage
+    {
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $ids = $iterator->fetch();
+
+        if ($ids === []) {
+            return null;
+        }
+
+        return new EntityIndexingMessage(array_values($ids), $iterator->getOffset());
+    }
+}
+```
+
+```php
+public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
+{
+    $ids = $event->getPrimaryKeys(CustomerDefinition::ENTITY_NAME);
+    if ($ids === []) {
+        return null;
+    }
+
+    return new EntityIndexingMessage(array_values($ids), null);
+}
+```
+
+```php
+// services.php
+$services->set(ExampleIndexer::class)->tag('shopware.entity_indexer');
+```
+
+## Reindexing and Worker Discipline
+
+- `bin/console dal:refresh:index` is the full-rebuild path. Treat it as an operational event, not a casual side effect of deployment.
+- Keep indexer messages small. Store IDs and minimal context only.
+- If indexing work can pile up behind checkout-sensitive messages, split transports or worker consumption accordingly.
+- Document fallback behavior when Elasticsearch or OpenSearch is stale, disabled, or rebuilding.
+
 ## Query Builder Customization
 
 - Extend product search query builders or search decorators instead of bypassing the configured search backend with raw SQL.
@@ -55,6 +119,7 @@ public function mapping(array $mapping): array
 - Keep index updates and batch jobs bounded.
 - If the project uses admin OpenSearch or search-specific flags, document the opt-in or fallback behavior in release notes and QA guidance.
 - When search behavior changes, verify both correctness and operational blast radius: index size, rebuild time, and fallback behavior.
+- When a plugin writes data that a custom indexer depends on, verify the write event, message emission, worker consumption, and search result all line up end to end.
 
 ## Review Prompts
 

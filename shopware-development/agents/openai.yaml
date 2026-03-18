@@ -1,4 +1,4 @@
 interface:
   display_name: "Shopware Development"
-  short_description: "Shopware 6.6/6.7 plugin, cart, testing, search, i18n, accessibility, payment, recurring, and review skill"
-  default_prompt: "Use $shopware-development as Shopware guardrails and context, not a cap on investigation depth, to plan, implement, harden, or review a Shopware 6 change, including cart or checkout flows, testing, search or indexing, snippets and translations, accessibility, recurring flows, headless payment contracts, and multi-plugin audits."
+  short_description: "Shopware 6.6/6.7 plugin, cache, queue, cart, indexing, accessibility, payment, recurring, and review skill"
+  default_prompt: "Use $shopware-development as Shopware guardrails and context, not a cap on investigation depth, to plan, implement, harden, or review a Shopware 6 change, including HTTP cache or Varnish safety, Messenger or RabbitMQ usage, cart or checkout flows, custom indexers, snippets and translations, accessibility, recurring flows, headless payment contracts, and multi-plugin audits."

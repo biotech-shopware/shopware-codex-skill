@@ -106,6 +106,34 @@ Example patterns:
 - Keep third-party widgets route-scoped and consent-aware.
 - If an external widget cannot meet keyboard, focus, or status requirements, treat it as a first-class defect, not a best-effort enhancement.
 
+Example patterns:
+
+```twig
+{# Preferred: modal trigger with instance-safe relationships #}
+<button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#address-modal-{{ page.customer.id }}"
+    aria-controls="address-modal-{{ page.customer.id }}">
+    {{ "account.address.edit"|trans }}
+</button>
+```
+
+```twig
+{# Preferred: async status and error association for coupon or checkout feedback #}
+<p id="coupon-status-{{ page.cart.token }}" class="visually-hidden" role="status" aria-live="polite"></p>
+<input
+    type="text"
+    name="couponCode"
+    aria-describedby="coupon-status-{{ page.cart.token }} coupon-error-{{ page.cart.token }}">
+{% if error is defined %}
+    <p id="coupon-error-{{ page.cart.token }}" class="text-danger">
+        {{ error.message|trans }}
+    </p>
+{% endif %}
+```
+
 ## Ecommerce Component Checklist
 
 Review these surfaces explicitly when auditing a Shopware storefront:
@@ -153,3 +181,5 @@ Treat these as explicit red flags:
 - body-wide MutationObservers used to repair accessibility after render
 - `searchMedia()` or similar helpers inside Twig loops
 - global `document.querySelector(...)` usage in storefront plugins that should be component-scoped
+- modal close flows that do not return focus to the invoking control
+- async add-to-cart, coupon, shipping, or checkout failures with no live status announcement

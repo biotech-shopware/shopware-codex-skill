@@ -29,10 +29,13 @@ Treat attached source material, ADRs, issues, forums, and blog posts as context 
 | `payment`, `PSP`, `webhook`, `refund`, `vault` | `07` | `15` for recurring, `16` for separate frontend, `18` for cart/checkout payment coupling |
 | `cart`, `checkout`, `line item`, `delivery`, `promotion` | `18` | `04` for backend architecture, `07` for payment, `13` for pricing scope |
 | `Twig`, `storefront`, `theme`, `SCSS`, `storefront JS` | `05` | `17` for accessibility, `16` for separate frontend |
+| `cache`, `http cache`, `varnish`, `reverse proxy` | `04`, `05`, `11` | `10` for exact docs and core anchors |
 | `admin`, `app`, `cloud`, `manifest`, `Pinia`, `Vite` | `06` | `02` for migration or version split, `21` for snippets |
+| `queue`, `messenger`, `rabbitmq`, `worker`, `async` | `04`, `11`, `14` | `18` for checkout handoff, `20` for indexer-related workers |
 | `review`, `audit`, `analysis` | `08` | add the domain refs that match the touched flow |
 | `test`, `PHPUnit`, `fixture`, `Store API test` | `19` | `18` for cart, `07` for payments, `20` for indexing |
 | `search`, `OpenSearch`, `Elasticsearch`, `listing` | `20` | `04` for DAL, `13` for commerce scope |
+| `indexer`, `reindex`, `dal:refresh:index` | `20` | `11` for operational pressure, `14` for worker and command execution |
 | `snippet`, `translation`, `locale`, `i18n` | `21` | `05` for storefront text, `06` for admin snippets, `02` for 6.7.3+ base snippets |
 
 3. Load only the relevant reference files for that task. Treat them as starting context, not a hard boundary. Keep following code, evidence, configs, adjacent repos, and official docs when the task requires it.
@@ -69,6 +72,9 @@ Treat attached source material, ADRs, issues, forums, and blog posts as context 
 - Review `convertedOrder`, cart snapshots, `customFields`, and `ApiAware` fields as data-exposure surfaces.
 - Keep scheduled tasks, reminders, and renewal scans batched, bounded, and keyed off technical names or immutable state, not translated labels.
 - Log correlation IDs and redacted metadata, not provider payloads, tokens, signatures, or customer PII.
+- Treat `sw-cache-hash` variation, invalidation states, cookies, and cacheable controller markup as reverse-proxy boundaries. Do not break Varnish or CDN cacheability casually.
+- Prefer CLI workers with explicit transports and failure queues on production. Treat the admin worker as a development fallback unless the project proves otherwise.
+- Indexers must stay bounded: batch with `IteratorFactory`, emit `EntityIndexingMessage`, and keep reindex implications explicit.
 - Keep template logic cheap, admin UIs thin, and background work asynchronous when possible.
 - Use the inline examples in the owning reference files as starting patterns, not as a ceiling on implementation design. Adapt them to the exact plugin, Shopware version, and project conventions.
 
@@ -83,9 +89,9 @@ Read only the files needed for the current task:
 - `references/03-implementation-workflow.md`
   chunking, validation, regression control, PR structure.
 - `references/04-plugin-backend.md`
-  backend architecture, DAL, Store API/Admin API, caching, migrations, queues.
+  backend architecture, DAL, Store API/Admin API, HTTP cache safety, migrations, queues.
 - `references/05-storefront-and-themes.md`
-  Twig, storefront JS, SCSS, themes, page loaders, SEO, accessibility basics.
+  Twig, storefront JS, SCSS, themes, page loaders, SEO, cache-safe rendering, accessibility basics.
 - `references/17-accessibility-and-template-best-practices.md`
   WCAG-oriented storefront accessibility reviews and remediation patterns.
 - `references/16-headless-and-composable-frontends.md`
@@ -101,13 +107,13 @@ Read only the files needed for the current task:
 - `references/10-official-docs-map.md`
   official docs and core-source anchors.
 - `references/11-quality-and-operations.md`
-  security baseline, external API resilience, observability, testing, store readiness.
+  security baseline, cache and queue operations, observability, testing, store readiness.
 - `references/12-extension-patterns.md`
   config, Flow Builder, CMS, import/export, media, mail, catalog, Rule Builder.
 - `references/13-context-and-commerce.md`
   `Context` vs `SalesChannelContext`, pricing, tax, multichannel rules.
 - `references/14-cli-and-dev-tooling.md`
-  console commands, static analysis, local tooling.
+  console commands, workers, static analysis, local tooling.
 - `references/15-subscriptions-and-recurring-payments.md`
   subscription lifecycle, renewal correctness, saved-method ownership.
 - `references/18-cart-and-checkout-pipeline.md`
@@ -115,7 +121,7 @@ Read only the files needed for the current task:
 - `references/19-testing-patterns.md`
   integration tests, Store API tests, fixtures, repository mocks, migration tests.
 - `references/20-search-and-indexing.md`
-  search routes, Elasticsearch/OpenSearch, mapping, reindexing, fallbacks.
+  search routes, indexers, Elasticsearch/OpenSearch, mapping, reindexing, fallbacks.
 - `references/21-internationalization-and-snippets.md`
   storefront/admin snippets, translation associations, fallback inheritance.
 

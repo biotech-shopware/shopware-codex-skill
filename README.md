@@ -2,7 +2,7 @@
 
 Public source for the `shopware-development` Codex skill.
 
-This skill is built for Shopware 6.7-first work with explicit 6.6 handling. It covers plugin development, storefront work, accessibility reviews, administration and apps, payments, subscriptions, headless frontend integrations, testing, search and indexing, localization, and code reviews.
+This skill is built for Shopware 6.7-first work with explicit 6.6 handling. It covers plugin development, storefront work, accessibility reviews, HTTP cache and Varnish-safe plugin behavior, Messenger and RabbitMQ-backed async work, administration and apps, payments, subscriptions, headless frontend integrations, testing, search and indexing, localization, and code reviews.
 
 ## Design
 
@@ -66,9 +66,9 @@ shopware-codex-skill/
 - `03-implementation-workflow.md`
   Small-step delivery, validation rules, PR templates, and QA template.
 - `04-plugin-backend.md`
-  Backend architecture, DAL, Store API, Admin API, caching, migrations, and async boundaries.
+  Backend architecture, DAL, Store API, Admin API, HTTP cache safety, migrations, Messenger patterns, and async boundaries.
 - `05-storefront-and-themes.md`
-  Twig, storefront JS, SCSS, theme work, cache-aware storefront behavior, and implementation-level accessibility basics.
+  Twig, storefront JS, SCSS, theme work, cache-aware storefront behavior, consent-aware widgets, modal patterns, and implementation-level accessibility basics.
 - `06-administration-and-apps.md`
   Administration modules, ACL, apps, cloud/app-first tradeoffs, and admin modernization surfaces.
 - `07-payments.md`
@@ -80,13 +80,13 @@ shopware-codex-skill/
 - `10-official-docs-map.md`
   Official Shopware and Symfony doc links plus core-source anchors.
 - `11-quality-and-operations.md`
-  Security baseline, external dependency resilience, observability, testing and CI, and common failure modes.
+  Security baseline, external dependency resilience, cache and queue operations, observability, testing and CI, and common failure modes.
 - `12-extension-patterns.md`
   Config, Flow Builder, CMS, import/export, media, mail/notification patterns, product/catalog extension choices, and Rule Builder.
 - `13-context-and-commerce.md`
   `Context` vs `SalesChannelContext`, pricing, tax, multichannel behavior, and B2B-sensitive logic.
 - `14-cli-and-dev-tooling.md`
-  Console commands, static analysis, CI, and local tooling.
+  Console commands, worker/runtime operations, static analysis, CI, and local tooling.
 - `15-subscriptions-and-recurring-payments.md`
   Subscription lifecycle, renewals, saved-method ownership, and recurring-flow audits.
 - `16-headless-and-composable-frontends.md`
@@ -94,11 +94,11 @@ shopware-codex-skill/
 - `17-accessibility-and-template-best-practices.md`
   WCAG-oriented storefront audits, theme/accessibility pitfalls, and accessibility review heuristics.
 - `18-cart-and-checkout-pipeline.md`
-  Cart collectors, processors, validators, line-item modeling, delivery/promotion interactions, and checkout hot-path rules.
+  Cart collectors, processors, validators, line-item modeling, delivery/promotion interactions, checkout hot-path rules, and async handoff boundaries.
 - `19-testing-patterns.md`
   Integration tests, Store API tests, fixtures, repository mocks, and Shopware test traits.
 - `20-search-and-indexing.md`
-  Search routes, Elasticsearch/OpenSearch extension points, mapping/fetch symmetry, reindexing, and fallback behavior.
+  Search routes, custom indexers, Elasticsearch/OpenSearch extension points, mapping/fetch symmetry, reindexing, and fallback behavior.
 - `21-internationalization-and-snippets.md`
   Storefront/admin snippets, translation associations, fallback rules, and 6.7 base-snippet conventions.
 
@@ -139,12 +139,17 @@ $shopware-development review this storefront for WCAG, keyboard, focus, modal, a
 $shopware-development analyze this cart or checkout change with focus on collectors, processors, pricing, delivery, and hot-path safety
 ```
 
+```text
+$shopware-development harden this Shopware 6.7 plugin so it stays Varnish-safe, uses Messenger/RabbitMQ correctly, and keeps indexers bounded and observable
+```
+
 ## How the Skill Works
 
 - `SKILL.md` stays lean and routes Codex to the right references.
 - References are loaded only as needed.
 - The skill is context and guardrails only, not a limit on review breadth or implementation depth.
 - The examples inside the references are anchors, not mandatory copy-paste solutions.
+- Cache, queue, and indexing guidance stays tied to official Shopware 6.7 docs, matching core behavior, and Symfony Messenger patterns.
 
 ## Release Model
 
