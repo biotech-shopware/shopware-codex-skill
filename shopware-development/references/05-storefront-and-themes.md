@@ -77,6 +77,7 @@ Example patterns:
 - Use the Shopware storefront plugin system and data attributes for progressive enhancement.
 - Keep client code thin and avoid duplicating server-side business rules.
 - Prefer Store API or purpose-built endpoints for dynamic data.
+- Use fetch instead of the HttpClient helper
 - Do not embed secrets or privileged logic in storefront JS.
 - Do not load third-party libraries globally when the feature only exists on one route or widget.
 - Do not write untrusted HTML with `innerHTML`, `insertAdjacentHTML`, or equivalent sinks. Treat `v-html` with the same suspicion.

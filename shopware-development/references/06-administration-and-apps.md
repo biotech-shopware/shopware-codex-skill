@@ -34,6 +34,11 @@ fetch('/api/_action/my-plugin/rebuild-index', {
 Preferred: keep the privileged action in the admin or app backend, protect it with ACL or signed app requests, and expose only customer-safe storefront routes through Store API or another ownership-checked backend route.
 ```
 
+## Administration Twig templates
+- Twig templates in Administration do not have access to the PHP Twig functions defined for Storefront
+- Templates are automatically extended, and do not need `{% extends '...' %}` or `{% sw_extends '...' %}`
+- Blocks are automatically overriding blocks if a parent exist. `{% parent %}` should be used to append content from the parent block.
+
 ## 6.7 Migration Surfaces
 
 Treat these as explicit modernization tasks:

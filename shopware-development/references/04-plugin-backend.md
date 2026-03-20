@@ -101,26 +101,6 @@ $criteria->addAssociation('transactions');
 $criteria->addAssociation('addresses');
 ```
 
-```php
-// Preferred: bounded list query plus targeted fields
-$criteria = new Criteria();
-$criteria->setLimit(50);
-$criteria->setOffset($offset);
-$criteria->addAssociation('transactions.stateMachineState');
-$criteria->addFields(['id', 'orderNumber', 'createdAt']);
-```
-
-```php
-// Preferred: merge custom fields instead of replacing unrelated state
-$payload = [
-    'id' => $orderId,
-    'customFields' => [
-        ...($order->getCustomFields() ?? []),
-        'my_plugin_sync_state' => 'queued',
-    ],
-];
-```
-
 ## Migrations and Schema Safety
 
 - Keep schema changes idempotent where possible.
@@ -129,6 +109,7 @@ $payload = [
 - Add indexes that match real filters, joins, and sort keys.
 - Add composite unique indexes where they enforce idempotency or natural uniqueness for operational tables.
 - Use parameter binding for manual SQL.
+- Never make changes to existing Migrations.
 
 ## Store API and Admin API
 

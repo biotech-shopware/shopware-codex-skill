@@ -52,6 +52,7 @@ Guardrails:
 - keep controllers, handlers, subscribers, and Twig thin
 - use constructor injection
 - load only the data needed
+- never change existing Migrations
 - avoid repository calls inside loops
 - queue heavy work and external I/O when it is not request-critical
 - do not trust client-supplied payment or authorization state

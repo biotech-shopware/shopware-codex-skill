@@ -9,9 +9,9 @@
 - API URL, timeout, debug mode, and feature flags belong in plugin configuration with a typed service, not in `private const` values scattered across services.
 - When writing custom fields programmatically, merge with the existing custom field array instead of replacing unrelated keys.
 
-## Business Events and Flow Builder
+## Flow Builder
 
-- Dispatch explicit business events for meaningful domain actions instead of hardcoding follow-up emails, tags, or webhooks.
+- Dispatch explicit Flow Builder-compatible events for meaningful domain actions instead of hardcoding follow-up emails, tags, or webhooks.
 - Use Flow Builder-compatible events when merchants should be able to react without code changes.
 - Implement custom flow actions when the plugin exposes a domain operation merchants should be able to call from Flow Builder.
 - Put the business decision in the service, then emit the event once state is committed.
@@ -38,6 +38,7 @@
 - Validate remote sources before downloading them and treat URL-based imports as SSRF-sensitive.
 - Keep folder configuration and thumbnail behavior explicit.
 - Upload a remote image through `MediaService` or `FileSaver`, create the media entity first, then associate the media ID to products or CMS content.
+- Don't forget to clean up temporary files after a file upload.
 
 ## Rule Builder Conditions
 
@@ -54,7 +55,7 @@
 
 ## Mail and Notification Patterns
 
-- Keep transactional email ownership explicit. Do not hardcode mail sends across random subscribers when Flow Builder, business events, or one orchestration service should own the decision.
+- Keep transactional email ownership explicit. Do not hardcode mail sends across random subscribers when Flow Builder events should own the decision.
 - Customize mail templates and payloads through stable extension points, not copy-pasted mail-rendering logic in controllers.
 - Do not block hot paths on email delivery when the business flow can durably queue or defer the send.
 
@@ -62,7 +63,7 @@ Example pattern:
 
 ```text
 Bad: send mail directly from every state-transition subscriber that notices the same order change.
-Good: dispatch one business event after the state is committed and let Flow Builder or one mail orchestration path send the notification.
+Good: dispatch one business event after the state is committed and let Flow Builder send the notification.
 ```
 
 ## Product and Catalog Extension Choices
