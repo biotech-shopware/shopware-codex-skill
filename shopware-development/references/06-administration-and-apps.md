@@ -36,6 +36,10 @@ fetch('/api/_action/my-plugin/rebuild-index', {
 Preferred: keep the privileged action in the admin or app backend, protect it with ACL or signed app requests, and expose only customer-safe storefront routes through Store API or another ownership-checked backend route.
 ```
 
+## Administration Twig templates
+- Twig templates in Administration do not have access to the PHP Twig functions defined for Storefront
+- Templates are automatically extended, and do not need `{% extends '...' %}` or `{% sw_extends '...' %}`
+- Blocks are automatically overriding blocks if a parent exist. `{% parent %}` should be used to append content from the parent block.
 ```text
 Bad: a new category tab writes cross-selling rows immediately on every click even though the data belongs to the category edit flow.
 Good: extend the category save flow by default and only choose immediate writes when the user explicitly wants that UX or the scale justifies it.

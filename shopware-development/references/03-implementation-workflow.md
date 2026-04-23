@@ -59,6 +59,7 @@ Guardrails:
 - keep the code DRY and KISS unless the project intentionally chose a different local standard
 - use constructor injection
 - load only the data needed
+- never change existing Migrations
 - avoid repository calls inside loops
 - queue heavy work and external I/O when it is not request-critical
 - do not trust client-supplied payment or authorization state
