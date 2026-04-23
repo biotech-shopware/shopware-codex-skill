@@ -2,7 +2,7 @@
 
 Public source for the `shopware-development` Codex skill.
 
-This skill is built for Shopware 6.7-first work with explicit 6.6 handling. It covers plugin development, storefront work, accessibility reviews, HTTP cache and Varnish-safe plugin behavior, Messenger and RabbitMQ-backed async work, administration and apps, payments, subscriptions, headless frontend integrations, testing, search and indexing, localization, and code reviews.
+This skill is built for Shopware 6.7-first work with explicit 6.6 handling. It covers plugin development, storefront work, pragmatic coding defaults, direction-choice discipline for high-impact admin/storefront decisions, stable review behavior, accessibility reviews, HTTP cache and Varnish-safe plugin behavior, Messenger and RabbitMQ-backed async work, administration and apps, payments, subscriptions, headless frontend integrations, testing, search and indexing, localization, and code reviews.
 
 ## Design
 
@@ -150,6 +150,7 @@ $shopware-development harden this Shopware 6.7 plugin so it stays Varnish-safe, 
 - The skill is context and guardrails only, not a limit on review breadth or implementation depth.
 - The examples inside the references are anchors, not mandatory copy-paste solutions.
 - Cache, queue, and indexing guidance stays tied to official Shopware 6.7 docs, matching core behavior, and Symfony Messenger patterns.
+- Repo-local `AGENTS.md` should hold team workflow, local command policy, and project-specific dormant-feature notes rather than pushing those preferences into the public skill.
 
 ## Release Model
 

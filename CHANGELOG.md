@@ -6,6 +6,23 @@ All notable changes to this repository are documented here.
 
 - No unreleased changes.
 
+## [v0.6.0] - 2026-04-01
+
+### Changed
+
+- Reframed the core implementation default from the mechanically smallest diff to the smallest coherent safe change.
+- Added explicit DRY and KISS guidance and rules against redundant defensive wrappers unless tied to a concrete failure mode.
+- Added high-impact ask-before-choosing rules for persistence flow, entity-modeling, native-component reuse, and meaningful admin/storefront UX direction changes.
+- Added review-baseline and finding-triage guidance for changed baselines, dormant features, deferred scope, and one-finding-at-a-time remediation.
+- Clarified the boundary between public skill defaults and repo-local `AGENTS.md` workflow preferences.
+- Updated `README.md` to reflect the new pragmatic-coding, direction-choice, and stable-review behavior.
+
+### Validation
+
+- Revalidated markdown frontmatter and `shopware-development/agents/openai.yaml`.
+- Grepped the skill pack for the new behavior terms and for accidental non-public feedback leakage.
+- Rechecked repo and global installed skill alignment after sync.
+
 ## [v0.5.0] - 2026-03-18
 
 ### Changed

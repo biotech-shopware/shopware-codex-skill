@@ -47,6 +47,7 @@ Use install/update lifecycle code only for plugin lifecycle concerns, not genera
 - Avoid `$container->get()` in runtime code.
 - Prefer decoration or events over replacing core behavior by inheritance.
 - Wrap external clients in services that centralize timeouts, retries, and logging policy.
+- Prefer one reusable seam over duplicated near-identical services when the behavior is actually shared.
 
 ## DAL and Data Modeling
 
@@ -61,6 +62,7 @@ Use install/update lifecycle code only for plugin lifecycle concerns, not genera
 - Use entity extensions or custom entities for structured domain state.
 - Do not use mutable JSON payload fields on line items, orders, or logs as primary operational query state. If you need to query or deduplicate by that state, model it in indexed columns or a custom entity instead.
 - Merge existing custom fields instead of overwriting the full array unless replacing everything is intentional and safe.
+- Do not add redundant casting, trimming, or null fallback logic after a typed DAL read or validated config read unless there is a concrete failure mode in that path.
 
 Entity extension decision matrix:
 
@@ -129,6 +131,8 @@ $criteria->addAssociation('addresses');
 - Resolve current-customer vaulted or saved-payment records server-side. Do not accept raw browser-stored vault identifiers as authoritative without ownership resolution.
 - Prefer decorating services or inner routes over redefining existing public routes. Route duplication or controller copy-paste often drops ACL, validation, or behavior guarantees.
 - Do not call your own shop's Admin API or Store API over HTTP from backend code in the same project. Inject the underlying services or repositories directly.
+- If multiple valid persistence flows exist, pause before choosing when the decision changes entity save behavior, immediate-write behavior, or the data model.
+- If plugin-owned data conceptually belongs to the parent entity edit flow, prefer the normal entity save pipeline by default.
 
 Keep detailed collector, processor, validator, delivery, and promotion pipeline rules in `18-cart-and-checkout-pipeline.md` instead of expanding this file with cart internals.
 
